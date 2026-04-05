@@ -16,13 +16,7 @@
 
 .skill-group {
   padding: 3rem 2.5rem;
-  transition: transform 0.4s ease, border-color 0.4s ease;
   border-top: 1px solid transparent;
-}
-
-.skill-group:hover {
-  transform: translateY(-8px);
-  border-top-color: var(--color-accent);
 }
 
 .group-header {

@@ -18,14 +18,8 @@
 .about-block {
   padding: 3.5rem;
   border-left: 2px solid var(--color-accent);
-  transition: transform 0.4s ease;
   position: relative;
   overflow: hidden;
-}
-
-.about-block:hover {
-  transform: translateY(-5px);
-  background: rgba(20, 20, 20, 0.6);
 }
 
 .block-header {
@@ -95,4 +89,32 @@
     padding: 1.5rem 1rem;
     border-left-width: 4px;
   }
+}
+
+.studio-stats {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.studio-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.stat-num {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--color-accent);
+  font-weight: 600;
 }

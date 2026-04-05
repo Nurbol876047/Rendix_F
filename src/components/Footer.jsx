@@ -1,21 +1,22 @@
-import React from 'react';
 import './Footer.css';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Footer = () => {
+  const { t } = useLanguage();
+
   return (
     <footer className="footer">
       <div className="container footer-content">
         <div className="footer-logo">
-          <span className="logo-text">Deepanshu</span>
+          <span className="logo-text">RENDIX STUDIO</span>
           <span className="logo-dot">.</span>
         </div>
         <p className="copyright">
-          © {new Date().getFullYear()} Deepanshu. Forged with React & Passion.
+          © {new Date().getFullYear()} {t('footer.studio')}. {t('footer.rights')}
         </p>
         <div className="footer-links">
-          <a href="https://github.com/deepanshu210306" target="_blank" rel="noopener noreferrer">GitHub</a>
-          <a href="https://www.linkedin.com/in/deephisariya/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          <a href="mailto:deepanshu210306@gmail.com">Email</a>
+          <a href="#">GitHub</a>
+          <a href="mailto:studio@rendix.kz">Email</a>
         </div>
       </div>
     </footer>

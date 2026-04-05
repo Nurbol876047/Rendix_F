@@ -1,74 +1,106 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { Code2, MonitorPlay, ShieldCheck } from 'lucide-react';
+import Tilt from 'react-parallax-tilt';
+import { Code2, ShieldCheck, Palette, Cpu } from 'lucide-react';
 import './Skills.css';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Skills = () => {
+  const { t } = useLanguage();
+
   const categories = [
     {
-      title: "Languages",
+      title: t('skills.web'),
       icon: <Code2 size={24} />,
-      items: ["C", "C++", "Python", "JavaScript", "SQL", "C#"]
-    },
-    {
-      title: "Frameworks",
-      icon: <MonitorPlay size={24} />,
       items: ["React", "Next.js", "Node.js", "TypeScript", "Tailwind CSS"]
     },
     {
-      title: "Developer Tools",
+      title: t('skills.cyber'),
       icon: <ShieldCheck size={24} />,
-      items: ["Git", "GitHub", "AutoCAD", "Figma", "Unity"]
+      items: ["Penetration Testing", "Security Audit", "Encryption", "Vulnerability Scanning"]
+    },
+    {
+      title: t('skills.design'),
+      icon: <Palette size={24} />,
+      items: ["Figma", "UI/UX Design", "3D Modeling", "Branding"]
+    },
+    {
+      title: t('skills.infrastructure'),
+      icon: <Cpu size={24} />,
+      items: ["Cloud AWS/Azure", "Docker", "CI/CD Pipelines", "System Architecture"]
     }
   ];
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.2 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-  };
 
   return (
     <section id="skills" className="skills section-padding">
       <div className="container">
-        <motion.h2
-          className="section-title"
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          Arsenal
-        </motion.h2>
+        <div className="section-title-container">
+          <motion.h2
+            className="section-title"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <motion.span
+              variants={{
+                hidden: { opacity: 0, scale: 0.8 },
+                visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } }
+              }}
+              style={{ display: 'inline-block' }}
+            >
+              {/* No icon for Skills section yet, but leaving container for consistency */}
+            </motion.span>
+            
+            {t('skills.title').split('').map((char, index) => (
+              <motion.span
+                key={index}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0,
+                    transition: { 
+                      duration: 0.4,
+                      delay: index * 0.05 
+                    }
+                  }
+                }}
+                style={{ display: 'inline-block', whiteSpace: char === ' ' ? 'pre' : 'normal' }}
+              >
+                {char}
+              </motion.span>
+            ))}
+          </motion.h2>
+        </div>
 
-        <motion.div
-          className="skills-layout"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
+        <div className="skills-layout">
           {categories.map((category, index) => (
-            <motion.div className="skill-group glass-panel" key={index} variants={itemVariants}>
-              <div className="group-header">
-                <div className="group-icon">{category.icon}</div>
-                <h3 className="group-title">{category.title}</h3>
-              </div>
-              <div className="skill-list">
-                {category.items.map((skill, i) => (
-                  <span className="skill-item" key={i}>{skill}</span>
-                ))}
-              </div>
-            </motion.div>
+            <Tilt 
+              key={index}
+              perspective={1500} 
+              scale={1.02} 
+              glareEnable={true} 
+              glareMaxOpacity={0.1}
+            >
+              <motion.div 
+                className="skill-group glass-panel interactive-card"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+              >
+                <div className="group-header">
+                  <div className="group-icon">{category.icon}</div>
+                  <h3 className="group-title">{category.title}</h3>
+                </div>
+                <div className="skill-list">
+                  {category.items.map((skill, i) => (
+                    <span className="skill-item" key={i}>{skill}</span>
+                  ))}
+                </div>
+              </motion.div>
+            </Tilt>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

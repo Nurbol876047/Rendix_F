@@ -8,6 +8,8 @@ import Projects from './components/Projects';
 import Contact from './components/Contact';
 import { Volume2, VolumeX } from 'lucide-react';
 
+import { LanguageProvider } from './contexts/LanguageContext';
+
 function App() {
   const bgmRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -48,34 +50,36 @@ function App() {
   };
 
   return (
-    <div className="app-container">
-      {/* Background Music Player */}
-      <audio ref={bgmRef} src="/kaze-no-kata.mp3" loop />
-      
-      {/* Floating Audio Toggle */}
-      <button 
-        onClick={toggleMusic} 
-        style={{
-          position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 9999,
-          background: 'rgba(10,10,10,0.6)', border: '1px solid rgba(255,255,255,0.1)',
-          color: '#fff', padding: '1rem', borderRadius: '50%', cursor: 'pointer',
-          backdropFilter: 'blur(10px)', transition: 'all 0.3s ease'
-        }}
-        className="interactive audio-toggle"
-      >
-        {isPlaying ? <Volume2 size={24} color="#d90429" /> : <VolumeX size={24} />}
-      </button>
+    <LanguageProvider>
+      <div className="app-container">
+        {/* Background Music Player */}
+        <audio ref={bgmRef} src="/kaze-no-kata.mp3" loop />
+        
+        {/* Floating Audio Toggle */}
+        <button 
+          onClick={toggleMusic} 
+          style={{
+            position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 9999,
+            background: 'rgba(10,10,10,0.6)', border: '1px solid rgba(255,255,255,0.1)',
+            color: '#fff', padding: '1rem', borderRadius: '50%', cursor: 'pointer',
+            backdropFilter: 'blur(10px)', transition: 'all 0.3s ease'
+          }}
+          className="interactive audio-toggle"
+        >
+          {isPlaying ? <Volume2 size={24} color="#d90429" /> : <VolumeX size={24} />}
+        </button>
 
-      <Navbar />
-      <main>
-        <Hero />
-        <About />
-        <Skills />
-        <Projects />
-        <Contact />
-      </main>
-      <Footer />
-    </div>
+        <Navbar />
+        <main>
+          <Hero />
+          <About />
+          <Skills />
+          <Projects />
+          <Contact />
+        </main>
+        <Footer />
+      </div>
+    </LanguageProvider>
   );
 }
 

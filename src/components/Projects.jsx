@@ -1,98 +1,87 @@
-import React from 'react';
 import { motion } from 'framer-motion';
+import Tilt from 'react-parallax-tilt';
 import { ArrowRight, SwatchBook } from 'lucide-react';
 import './Projects.css';
-
-const projects = [
-  {
-    title: "It's A Cube Game",
-    date: "Dec 2025",
-    description: "A forward-runner Unity game with C# scripting. Supports Keyboard, Touch, and Quest 3 VR Controllers via the Input System.",
-    tags: ["Unity", "C#", "VR"],
-    link: "https://github.com/deepanshu210306"
-  },
-  {
-    title: "Real-Time Order Book Visualizer",
-    date: "Oct 2025 - Nov 2025",
-    description: "Real-time UI streaming 100ms Binance WebSocket data handling 1k+ updates/sec.",
-    tags: ["Next.js", "TypeScript", "WebSockets"],
-    link: "https://github.com/deepanshu210306"
-  },
-  {
-    title: "Energy Society Platform",
-    date: "Apr 2025 - Jun 2025",
-    description: "Official web platform of the Energy Society, IIT Delhi. Deployed firmly on the institute server.",
-    tags: ["React", "Tailwind CSS"],
-    link: "https://github.com/deepanshu210306"
-  },
-  {
-    title: "Flight Route Planner",
-    date: "Nov 2024",
-    description: "Flight route optimizer applying BFS & Dijkstra's algorithms. Engineered with relaxation logic.",
-    tags: ["Python", "Algorithms"],
-    link: "https://github.com/deepanshu210306"
-  },
-  {
-    title: "Information Retrieval Engine",
-    date: "Feb 2024 - Apr 2024",
-    description: "Document engine modeled via Hash Maps & Tries. Supplies TF-IDF into a RAG pipeline.",
-    tags: ["Python", "TF-IDF", "RAG"],
-    link: "https://github.com/deepanshu210306"
-  },
-  {
-    title: "HygroHalt ESP8266",
-    date: "Feb 2024 - Apr 2024",
-    description: "IoT Compact Dehumidifier. Programmed an Arduino Uno interfacing a DHT11 sensor.",
-    tags: ["Arduino", "C/C++", "IoT"],
-    link: "https://github.com/deepanshu"
-  }
-];
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Projects = () => {
+  const { t } = useLanguage();
+  const projectItems = t('projects.items');
+
   return (
     <section id="projects" className="projects section-padding">
       <div className="container">
-        <motion.h2
-          className="section-title"
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <SwatchBook className="title-icon" size={32} /> Campaigns
-        </motion.h2>
+        <div className="section-title-container">
+          <motion.h2
+            className="section-title"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <motion.span
+              variants={{
+                hidden: { opacity: 0, scale: 0.8 },
+                visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } }
+              }}
+              style={{ display: 'inline-block', marginRight: '1rem' }}
+            >
+              <SwatchBook className="title-icon" size={32} />
+            </motion.span>
+            
+            {t('projects.title').split('').map((char, index) => (
+              <motion.span
+                key={index}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0,
+                    transition: { 
+                      duration: 0.4,
+                      delay: index * 0.05 
+                    }
+                  }
+                }}
+                style={{ display: 'inline-block', whiteSpace: char === ' ' ? 'pre' : 'normal' }}
+              >
+                {char}
+              </motion.span>
+            ))}
+          </motion.h2>
+        </div>
 
         <div className="projects-grid">
-          {projects.map((project, index) => (
-            <motion.a
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="project-card glass-panel interactive"
+          {Array.isArray(projectItems) && projectItems.map((project, index) => (
+            <Tilt 
               key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
+              perspective={1500} 
+              scale={1.02} 
+              glareEnable={true} 
+              glareMaxOpacity={0.1}
             >
-              <div className="project-cap"></div>
-              <div className="project-content">
-                <span className="project-date">{project.date}</span>
-                <h3 className="project-title">{project.title}</h3>
-                <p className="project-description">{project.description}</p>
-              </div>
-
-              <div className="project-footer">
-                <div className="project-tags">
-                  {project.tags.map((tag, i) => (
-                    <span className="project-tag" key={i}>{tag}</span>
-                  ))}
+              <motion.div
+                className="project-card glass-panel interactive-card"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+              >
+                <div className="project-content">
+                  <h3 className="project-title">{project.title}</h3>
+                  <p className="project-description">{project.description}</p>
                 </div>
-                <button className="project-link-btn">
-                  <ArrowRight size={20} />
-                </button>
-              </div>
-            </motion.a>
+
+                <div className="project-footer">
+                  <div className="project-tags">
+                    <span className="project-tag">Studio</span>
+                    <span className="project-tag">Enterprise</span>
+                  </div>
+                  <button className="project-link-btn">
+                    <ArrowRight size={20} />
+                  </button>
+                </div>
+              </motion.div>
+            </Tilt>
           ))}
         </div>
       </div>

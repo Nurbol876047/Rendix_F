@@ -1,62 +1,110 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, Flag, SquareTerminal } from 'lucide-react';
+import Tilt from 'react-parallax-tilt';
+import { BookOpen, Shield, SquareTerminal } from 'lucide-react';
 import './About.css';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const About = () => {
+  const { t } = useLanguage();
+
   return (
     <section id="about" className="about section-padding">
       <div className="container">
-        <motion.h2
-          className="section-title"
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <SquareTerminal className="title-icon" size={32} /> The Path
-        </motion.h2>
+        <div className="section-title-container">
+          <motion.h2
+            className="section-title"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <motion.span
+              variants={{
+                hidden: { opacity: 0, scale: 0.8 },
+                visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } }
+              }}
+              style={{ display: 'inline-block', marginRight: '1rem' }}
+            >
+              <SquareTerminal className="title-icon" size={32} />
+            </motion.span>
+            
+            {t('about.title').split('').map((char, index) => (
+              <motion.span
+                key={index}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0,
+                    transition: { 
+                      duration: 0.4,
+                      delay: index * 0.05 
+                    }
+                  }
+                }}
+                style={{ display: 'inline-block', whiteSpace: char === ' ' ? 'pre' : 'normal' }}
+              >
+                {char}
+              </motion.span>
+            ))}
+          </motion.h2>
+        </div>
 
         <div className="about-grid">
-          <motion.div
-            className="about-block glass-panel"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+          <Tilt 
+            perspective={1500} 
+            scale={1.02} 
+            glareEnable={true} 
+            glareMaxOpacity={0.1}
           >
-            <div className="block-header">
-              <BookOpen size={24} className="block-icon" />
-              <h3>Education</h3>
-            </div>
-            <p className="block-body">
-              I am currently pursuing a <strong>B.Tech in Energy Engineering</strong> at the <strong>Indian Institute of Technology Delhi</strong>. Through unyielding discipline, I secured a <strong>99.607 percentile in JEE Main (2023)</strong>—standing out among over 1.4 million candidates. I have also cleared the NDA Examination (2022) and the Haryana State Talent Search Examination (HSTSE) (2021).
-            </p>
-          </motion.div>
+            <motion.div
+              className="about-block glass-panel interactive-card"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <div className="block-header">
+                <Shield size={24} className="block-icon" />
+                <h3>{t('about.mission')}</h3>
+              </div>
+              <p className="block-body">
+                {t('about.missionText')}
+              </p>
+            </motion.div>
+          </Tilt>
 
-          <motion.div
-            className="about-block glass-panel"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+          <Tilt 
+            perspective={1500} 
+            scale={1.02} 
+            glareEnable={true} 
+            glareMaxOpacity={0.1}
           >
-            <div className="block-header">
-              <Flag size={24} className="block-icon" />
-              <h3>Leadership</h3>
-            </div>
-            <div className="leadership-item">
-              <h4>Design and Operations Coordinator</h4>
-              <p className="leadership-meta">Energy Society, IIT Delhi <span>[Jun 2025 - Present]</span></p>
-            </div>
-            <div className="leadership-item">
-              <h4>Operations Executive</h4>
-              <p className="leadership-meta">Energy Society, IIT Delhi <span>[Jul 2024 - Jun 2025]</span></p>
-            </div>
-            <p className="leadership-summary">
-              Commanding cross-functional teams and orchestrating large-scale events with precision.
-            </p>
-          </motion.div>
+            <motion.div
+              className="about-block glass-panel interactive-card"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              <div className="block-header">
+                <BookOpen size={24} className="block-icon" />
+                <h3>{t('about.expertise')}</h3>
+              </div>
+              <p className="block-body">
+                {t('about.expertiseText')}
+              </p>
+              <div className="studio-stats">
+                <div className="studio-stat">
+                  <span className="stat-label">{t('about.stats.projects')}</span>
+                  <span className="stat-num">50+</span>
+                </div>
+                <div className="studio-stat">
+                  <span className="stat-label">{t('about.stats.security')}</span>
+                  <span className="stat-num">99.9%</span>
+                </div>
+              </div>
+            </motion.div>
+          </Tilt>
         </div>
       </div>
     </section>

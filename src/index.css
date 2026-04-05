@@ -51,8 +51,24 @@ body {
   margin-bottom: 5rem;
   color: var(--color-text);
   display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
   align-items: center;
-  gap: 1.5rem;
+}
+
+.section-title span {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.2rem 0.6rem;
+  border-left: 1px solid rgba(230, 57, 70, 0.3);
+  display: inline-block;
+  min-width: 1.2ch;
+  text-align: center;
+}
+
+.section-title span:first-child {
+  background: transparent;
+  border-left: none;
+  padding-left: 0;
 }
 
 .title-icon {
@@ -63,6 +79,56 @@ body {
   background: linear-gradient(145deg, rgba(15, 15, 15, 0.6) 0%, rgba(5, 5, 5, 0.9) 100%);
   border: 1px solid var(--color-border);
   border-radius: 1px;
+}
+
+.interactive-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  cursor: pointer;
+}
+
+.interactive-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-accent);
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 0;
+}
+
+.interactive-card:hover::before {
+  transform: translateX(100%);
+}
+
+.interactive-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.interactive-card:hover .group-title,
+.interactive-card:hover .block-header h3,
+.interactive-card:hover .project-title,
+.interactive-card:hover .block-body,
+.interactive-card:hover .leadership-item h4,
+.interactive-card:hover .leadership-meta,
+.interactive-card:hover .leadership-meta span,
+.interactive-card:hover .skill-item {
+  color: #fff !important;
+}
+
+.interactive-card:hover .group-icon,
+.interactive-card:hover .block-icon,
+.interactive-card:hover .title-icon,
+.interactive-card:hover .hero-kicker,
+.interactive-card:hover .hero-name,
+.interactive-card:hover .hero-subtext,
+.interactive-card:hover .stat-item span,
+.interactive-card:hover .stat-value {
+  color: #fff !important;
 }
 
 a {
