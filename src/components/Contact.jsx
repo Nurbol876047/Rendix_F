@@ -1,11 +1,8 @@
 import { motion } from 'framer-motion';
-import { ArrowUpRight, Github, Globe } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import './Contact.css';
-import { useLanguage } from '../contexts/LanguageContext';
 
 const Contact = () => {
-  const { t } = useLanguage();
-
   return (
     <section id="contact" className="contact section-padding">
       <div className="container">
@@ -21,9 +18,6 @@ const Contact = () => {
             <div className="lamp-head"></div>
             <div className="lamp-beam"></div>
           </div>
-          <h2 className="contact-heading">
-            {t('contact.subtitle')}
-          </h2>
 
           <motion.div
             className="contact-actions"
@@ -32,24 +26,8 @@ const Contact = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <span className="contact-kicker">{t('contact.title')}</span>
-            <a href="mailto:studio@rendix.kz" className="email-link">
-              studio@rendix.kz <ArrowUpRight className="arrow" size={28} />
-            </a>
-          </motion.div>
-
-          <motion.div
-            className="social-links"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            <a href="#" className="social-item interactive-card">
-              <Github size={20} /> GitHub
-            </a>
-            <a href="#" className="social-item interactive-card">
-              <Globe size={20} /> Web
+            <a href="https://wa.me/77764370355" className="email-link" target="_blank" rel="noreferrer">
+              +7 776 437 03 55 <ArrowUpRight className="arrow" size={28} />
             </a>
           </motion.div>
         </motion.div>

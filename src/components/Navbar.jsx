@@ -18,12 +18,11 @@ const Navbar = () => {
     <nav className={`navbar ${scrolled ? 'nav-scrolled' : ''}`}>
       <div className="container nav-container">
         <a href="#home" className="nav-brand">
-          <span className="brand-d">DS</span>
-          <span className="brand-dot">P</span>
+          <span className="brand-main">RENDIX</span>
+          <span className="brand-sub">studio</span>
         </a>
         <div className="nav-menu">
-          <a href="#about" className="nav-item">{t('nav.about')}</a>
-          <a href="#skills" className="nav-item">{t('nav.expertise')}</a>
+          <a href="#skills" className="nav-item">{t('skills.title')}</a>
           <a href="#projects" className="nav-item">{t('nav.work')}</a>
           <a href="#contact" className="nav-item">{t('nav.contact')}</a>
           

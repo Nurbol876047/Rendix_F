@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
-import { BookOpen, Shield, SquareTerminal } from 'lucide-react';
+import { BookOpen, Shield } from 'lucide-react';
 import './About.css';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -10,45 +10,6 @@ const About = () => {
   return (
     <section id="about" className="about section-padding">
       <div className="container">
-        <div className="section-title-container">
-          <motion.h2
-            className="section-title"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            <motion.span
-              variants={{
-                hidden: { opacity: 0, scale: 0.8 },
-                visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } }
-              }}
-              style={{ display: 'inline-block', marginRight: '1rem' }}
-            >
-              <SquareTerminal className="title-icon" size={32} />
-            </motion.span>
-            
-            {t('about.title').split('').map((char, index) => (
-              <motion.span
-                key={index}
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { 
-                    opacity: 1, 
-                    y: 0,
-                    transition: { 
-                      duration: 0.4,
-                      delay: index * 0.05 
-                    }
-                  }
-                }}
-                style={{ display: 'inline-block', whiteSpace: char === ' ' ? 'pre' : 'normal' }}
-              >
-                {char}
-              </motion.span>
-            ))}
-          </motion.h2>
-        </div>
-
         <div className="about-grid">
           <Tilt 
             perspective={1500} 

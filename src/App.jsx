@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Hero from './components/Hero';
-import About from './components/About';
 import Skills from './components/Skills';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
+import FinalComputerScene from './components/FinalComputerScene';
 import { Volume2, VolumeX } from 'lucide-react';
 
 import { LanguageProvider } from './contexts/LanguageContext';
@@ -72,8 +72,8 @@ function App() {
         <Navbar />
         <main>
           <Hero />
-          <About />
           <Skills />
+          <FinalComputerScene />
           <Projects />
           <Contact />
         </main>

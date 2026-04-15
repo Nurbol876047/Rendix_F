@@ -42,6 +42,12 @@ body {
   padding: 10rem 0;
 }
 
+@media (max-width: 1200px) {
+  .section-padding {
+    padding: 7rem 0;
+  }
+}
+
 .section-title {
   font-family: var(--font-heading);
   font-size: clamp(2.5rem, 6vw, 4.5rem);
@@ -52,23 +58,64 @@ body {
   color: var(--color-text);
   display: flex;
   flex-wrap: wrap;
-  gap: 0.2rem;
+  gap: 0.28rem;
   align-items: center;
 }
 
-.section-title span {
-  background: rgba(255, 255, 255, 0.03);
-  padding: 0.2rem 0.6rem;
-  border-left: 1px solid rgba(230, 57, 70, 0.3);
-  display: inline-block;
-  min-width: 1.2ch;
-  text-align: center;
+.section-title-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.9rem;
 }
 
-.section-title span:first-child {
-  background: transparent;
-  border-left: none;
-  padding-left: 0;
+.section-title-space {
+  width: 1rem;
+  flex: 0 0 1rem;
+}
+
+.section-letter {
+  position: relative;
+  display: inline-flex;
+  width: 1.32em;
+  height: 1.3em;
+  perspective: 1000px;
+}
+
+.section-letter-flip {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.section-letter:hover .section-letter-flip {
+  transform: rotateX(180deg);
+}
+
+.section-letter-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 1px solid rgba(230, 57, 70, 0.3);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  user-select: none;
+}
+
+.section-letter-front {
+  color: var(--color-text);
+}
+
+.section-letter-back {
+  color: #ffffff;
+  background: linear-gradient(180deg, rgba(230, 57, 70, 0.22), rgba(15, 15, 15, 0.95));
+  transform: rotateX(180deg);
+  text-shadow: 0 0 18px rgba(230, 57, 70, 0.35);
 }
 
 .title-icon {
@@ -115,8 +162,7 @@ body {
 .interactive-card:hover .block-body,
 .interactive-card:hover .leadership-item h4,
 .interactive-card:hover .leadership-meta,
-.interactive-card:hover .leadership-meta span,
-.interactive-card:hover .skill-item {
+.interactive-card:hover .leadership-meta span {
   color: #fff !important;
 }
 
@@ -211,6 +257,18 @@ a {
   }
   .section-title {
     margin-bottom: 3rem;
+    gap: 0.18rem;
+  }
+  .section-title-icon-wrap {
+    margin-right: 0.5rem;
+  }
+  .section-title-space {
+    width: 0.5rem;
+    flex-basis: 0.5rem;
+  }
+  .section-letter {
+    width: 1.14em;
+    height: 1.22em;
   }
   .btn-primary, .btn-secondary {
     padding: 1.2rem 1.5rem;

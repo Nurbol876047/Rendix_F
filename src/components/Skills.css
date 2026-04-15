@@ -5,25 +5,28 @@
 .skills-layout {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: 1.75rem;
 }
 
 @media (min-width: 768px) {
   .skills-layout {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 .skill-group {
-  padding: 3rem 2.5rem;
+  padding: 2.2rem 2rem;
   border-top: 1px solid transparent;
+  min-height: 132px;
+  display: flex;
+  align-items: center;
 }
 
 .group-header {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 0;
 }
 
 .group-icon {
@@ -32,48 +35,148 @@
 
 .group-title {
   font-family: var(--font-heading);
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
 
-.skill-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
+.skills-spotlight {
+  margin-top: 3.5rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.skill-item {
-  font-family: var(--font-body);
+.skills-spotlight-label {
+  margin-bottom: 1.45rem;
+  font-family: var(--font-heading);
   font-size: 1rem;
-  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.skills-spotlight-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.55rem;
+}
+
+.skills-spotlight-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 252px;
+  padding: 2.05rem 1.85rem 1.9rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(230, 57, 70, 0.45);
+  background:
+    radial-gradient(circle at top right, rgba(230, 57, 70, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(24, 9, 11, 0.96), rgba(9, 7, 8, 0.98));
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.skills-spotlight-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(230, 57, 70, 0.78);
+  box-shadow: 0 22px 44px rgba(230, 57, 70, 0.08);
+}
+
+.skills-spotlight-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.35rem;
+}
+
+.skills-spotlight-title {
   display: flex;
   align-items: center;
-  transition: color 0.3s ease, transform 0.3s ease;
+  gap: 0.9rem;
 }
 
-.skill-item::before {
-  content: '';
-  display: inline-block;
-  width: 8px;
-  height: 2px;
-  background-color: var(--color-border);
-  margin-right: 1rem;
-  transition: background-color 0.3s ease, width 0.3s ease;
+.skills-spotlight-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent);
+  flex-shrink: 0;
 }
 
-.skill-group:hover .skill-item::before {
-  background-color: var(--color-accent);
-  width: 16px;
-}
-
-.skill-item:hover {
+.skills-spotlight-title h3 {
+  font-family: var(--font-heading);
+  font-size: 1.46rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   color: var(--color-text);
-  transform: translateX(5px);
+}
+
+.skills-spotlight-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.28rem 0.78rem;
+  border-radius: 0.45rem;
+  border: 1px solid rgba(230, 57, 70, 0.28);
+  background: rgba(230, 57, 70, 0.12);
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+
+.skills-spotlight-list {
+  display: grid;
+  gap: 0.95rem;
+}
+
+.skills-spotlight-item {
+  position: relative;
+  padding-left: 1.05rem;
+  font-size: 1.08rem;
+  color: rgba(255, 255, 255, 0.66);
+  line-height: 1.5;
+}
+
+.skills-spotlight-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.1rem;
+  width: 1px;
+  height: 1.1rem;
+  background: rgba(230, 57, 70, 0.72);
+}
+
+@media (min-width: 768px) {
+  .skills-spotlight-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
   .skill-group {
     padding: 1.5rem;
+    min-height: 108px;
+  }
+
+  .skills-spotlight {
+    margin-top: 2.5rem;
+  }
+
+  .skills-spotlight-card {
+    min-height: auto;
+    padding: 1.55rem 1.25rem 1.45rem;
+  }
+
+  .skills-spotlight-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .skills-spotlight-title h3 {
+    font-size: 1.22rem;
   }
 }

@@ -30,7 +30,7 @@
 /* Swinging Lamp System */
 .lamp-system {
   position: absolute;
-  top: -150px;
+  top: -220px;
   left: 50%;
   transform-origin: top center;
   animation: swing-lamp 2.2s linear infinite alternate;
@@ -96,7 +96,16 @@
 }
 
 .contact-actions {
-  margin-bottom: 6rem;
+  margin-bottom: 2rem;
+}
+
+.contact-channel-label {
+  display: block;
+  font-size: 0.95rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.48);
+  margin-bottom: 0.9rem;
 }
 
 .email-link {
@@ -127,34 +136,47 @@
   transform: translate(5px, -5px);
 }
 
-.social-links {
-  display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.social-item {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  font-family: var(--font-body);
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-text-muted);
-  transition: all 0.3s ease;
-  padding: 0.8rem 1.5rem;
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
-}
-
 @media (max-width: 768px) {
   .contact-wrapper {
-    padding: 3rem 1.5rem;
+    padding: 2.8rem 1.25rem;
   }
-  .social-item {
-    width: 100%;
-    justify-content: center;
+
+  .lamp-system {
+    top: -185px;
+  }
+
+  .lamp-wire {
+    height: 165px;
+  }
+
+  .lamp-beam {
+    top: 181px;
+    width: 660px;
+    height: 430px;
+  }
+
+  .email-link {
+    gap: 0.9rem;
+    font-size: clamp(1rem, 6vw, 1.4rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-wrapper {
+    padding: 2.6rem 1rem;
+  }
+
+  .lamp-system {
+    top: -170px;
+  }
+
+  .lamp-wire {
+    height: 150px;
+  }
+
+  .lamp-beam {
+    top: 166px;
+    width: 520px;
+    height: 360px;
   }
 }

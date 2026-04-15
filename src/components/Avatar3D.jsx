@@ -7,13 +7,11 @@ function Logo() {
   const group = useRef();
   const textRef = useRef();
   
-  // Rotate and float the logo
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
-    group.current.rotation.y = Math.sin(t * 0.4) * 0.3; // Gentle oscillation
-    group.current.rotation.x = Math.cos(t * 0.3) * 0.15; // Slight pitch
-    
-    // Pulse effect for the red glow
+    group.current.rotation.y = Math.sin(t * 0.4) * 0.3;
+    group.current.rotation.x = Math.cos(t * 0.3) * 0.15;
+
     if (textRef.current) {
       textRef.current.material.emissiveIntensity = 0.8 + Math.sin(t * 2) * 0.4;
     }
@@ -42,7 +40,6 @@ function Logo() {
         />
       </Text>
       
-      {/* Dynamic cinematic lighting around the logo */}
       <pointLight position={[0, -0.5, 1]} intensity={2} color="#ff3333" />
       <pointLight position={[0, 0.5, -1]} intensity={1} color="#ffffff" />
     </group>
@@ -61,7 +58,6 @@ const Avatar3D = () => {
           <Logo />
         </Float>
         
-        {/* Cinematic atmospheric particles */}
         <Sparkles count={80} scale={6} size={3} speed={0.5} opacity={0.6} color="#ff3300" />
         <Environment preset="city" />
         <OrbitControls enableZoom={false} autoRotate={false} />

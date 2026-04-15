@@ -40,17 +40,6 @@ const Hero = () => {
                   {t('hero.subtext')}
                 </p>
                 
-                <div className="hero-tech-stats">
-                  <div className="stat-item">
-                    <span>{t('hero.status')}</span>
-                    <span className="stat-value">{t('hero.operational')}</span>
-                  </div>
-                  <div className="stat-item">
-                    <span>{t('hero.latency')}</span>
-                    <span className="stat-value">{t('hero.fast')}</span>
-                  </div>
-                </div>
-
                 <div className="hero-actions">
                   <a href="#projects" className="btn-primary">
                     <span>{t('hero.viewArsenal')}</span>

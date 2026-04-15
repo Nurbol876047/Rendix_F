@@ -15,8 +15,7 @@ const Footer = () => {
           © {new Date().getFullYear()} {t('footer.studio')}. {t('footer.rights')}
         </p>
         <div className="footer-links">
-          <a href="#">GitHub</a>
-          <a href="mailto:studio@rendix.kz">Email</a>
+          <a href="https://wa.me/77764370355" target="_blank" rel="noreferrer">WhatsApp</a>
         </div>
       </div>
     </footer>
