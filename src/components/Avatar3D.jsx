@@ -31,10 +31,37 @@ const Avatar3D = () => {
   const stageRef = useRef(null);
   const frameRef = useRef(0);
   const idleStartRef = useRef(0);
-  const currentRef = useRef({ rotateX: -8, rotateY: 12 });
-  const targetRef = useRef({ rotateX: -8, rotateY: 12 });
-  const pointerRef = useRef({ x: 0, y: 0 });
-  const pointerTargetRef = useRef({ x: 0, y: 0 });
+  const currentRef = useRef({ rotateX: -14, rotateY: 0, floatY: 0 });
+  const targetRef = useRef({ rotateX: -14, rotateY: 0 });
+  const velocityRef = useRef({ rotateX: 0, rotateY: 0 });
+  const dragRef = useRef({
+    active: false,
+    pointerId: null,
+    startX: 0,
+    startY: 0,
+    baseRotateX: -14,
+    baseRotateY: 0,
+    lastX: 0,
+    lastY: 0,
+    lastTime: 0,
+  });
+
+  const renderLogoWord = (faceClass) => (
+    <div className={`avatar-logo-word ${faceClass}`} aria-hidden="true">
+      {brandLetters.map((letter, index) => (
+        <span
+          key={`${faceClass}-${index}`}
+          className={`avatar-logo-letter${index === 1 || index === 2 ? ' is-hot' : ''}`}
+          style={{
+            '--letter-delay': `${index * 0.18}s`,
+            '--letter-shift': `${(index % 2 === 0 ? -1 : 1) * (3 + (index % 3))}px`,
+          }}
+        >
+          {letter}
+        </span>
+      ))}
+    </div>
+  );
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -55,19 +82,34 @@ const Avatar3D = () => {
       }
 
       const elapsed = (timestamp - idleStartRef.current) / 1000;
-      const idleRotateX = -4.6 + Math.sin(elapsed * 1.08) * 1.7;
-      const idleRotateY = 6.8 + Math.cos(elapsed * 0.82) * 4.2;
+      const idleRotateX = Math.sin(elapsed * 0.92) * 1.8;
+      const idleRotateY = Math.cos(elapsed * 0.74) * 1.4;
 
-      pointerRef.current.x += (pointerTargetRef.current.x - pointerRef.current.x) * 0.08;
-      pointerRef.current.y += (pointerTargetRef.current.y - pointerRef.current.y) * 0.08;
+      if (!dragRef.current.active) {
+        targetRef.current.rotateX += velocityRef.current.rotateX;
+        targetRef.current.rotateY += velocityRef.current.rotateY;
+        velocityRef.current.rotateX *= 0.94;
+        velocityRef.current.rotateY *= 0.94;
 
-      targetRef.current.rotateX = idleRotateX + pointerRef.current.y * -5.4;
-      targetRef.current.rotateY = idleRotateY + pointerRef.current.x * 6.2;
-      currentRef.current.floatY = Math.sin(elapsed * 1.35) * -4.5;
+        if (Math.abs(velocityRef.current.rotateX) < 0.002) {
+          velocityRef.current.rotateX = 0;
+        }
+
+        if (Math.abs(velocityRef.current.rotateY) < 0.002) {
+          velocityRef.current.rotateY = 0;
+        }
+      }
+
+      currentRef.current.floatY = Math.sin(elapsed * 1.18) * -5.8;
 
       currentRef.current.rotateX += (targetRef.current.rotateX - currentRef.current.rotateX) * 0.09;
       currentRef.current.rotateY += (targetRef.current.rotateY - currentRef.current.rotateY) * 0.09;
+      currentRef.current.rotateX += idleRotateX;
+      currentRef.current.rotateY += idleRotateY;
       applyTransforms();
+
+      currentRef.current.rotateX -= idleRotateX;
+      currentRef.current.rotateY -= idleRotateY;
 
       frameRef.current = window.requestAnimationFrame(animate);
     };
@@ -79,26 +121,68 @@ const Avatar3D = () => {
     };
   }, []);
 
-  const handlePointerMove = (event) => {
+  const handlePointerDown = (event) => {
     const showcase = showcaseRef.current;
 
     if (!showcase) {
       return;
     }
 
-    const rect = showcase.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const normalizedX = (event.clientX - centerX) / (rect.width / 2);
-    const normalizedY = (event.clientY - centerY) / (rect.height / 2);
+    dragRef.current = {
+      active: true,
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      baseRotateX: targetRef.current.rotateX,
+      baseRotateY: targetRef.current.rotateY,
+      lastX: event.clientX,
+      lastY: event.clientY,
+      lastTime: performance.now(),
+    };
 
-    pointerTargetRef.current.x = Math.max(-1, Math.min(1, normalizedX));
-    pointerTargetRef.current.y = Math.max(-1, Math.min(1, normalizedY));
+    velocityRef.current.rotateX = 0;
+    velocityRef.current.rotateY = 0;
+    showcase.classList.add('is-dragging');
+    showcase.setPointerCapture?.(event.pointerId);
   };
 
-  const handlePointerLeave = () => {
-    pointerTargetRef.current.x = 0;
-    pointerTargetRef.current.y = 0;
+  const handlePointerMove = (event) => {
+    if (!dragRef.current.active) {
+      return;
+    }
+
+    const deltaX = event.clientX - dragRef.current.startX;
+    const deltaY = event.clientY - dragRef.current.startY;
+    const rotateY = dragRef.current.baseRotateY + deltaX * 0.58;
+    const rotateX = dragRef.current.baseRotateX - deltaY * 0.46;
+    const now = performance.now();
+    const elapsed = Math.max(16, now - dragRef.current.lastTime);
+    const frameStep = elapsed / 16.67;
+
+    targetRef.current.rotateY = rotateY;
+    targetRef.current.rotateX = rotateX;
+    velocityRef.current.rotateY = (((event.clientX - dragRef.current.lastX) * 0.58) / frameStep) * 0.18;
+    velocityRef.current.rotateX = (((dragRef.current.lastY - event.clientY) * 0.46) / frameStep) * 0.18;
+
+    dragRef.current.lastX = event.clientX;
+    dragRef.current.lastY = event.clientY;
+    dragRef.current.lastTime = now;
+  };
+
+  const handlePointerEnd = (event) => {
+    const showcase = showcaseRef.current;
+
+    if (!dragRef.current.active || !showcase) {
+      return;
+    }
+
+    dragRef.current.active = false;
+    dragRef.current.pointerId = null;
+    showcase.classList.remove('is-dragging');
+
+    if (event?.pointerId !== undefined && showcase.hasPointerCapture?.(event.pointerId)) {
+      showcase.releasePointerCapture(event.pointerId);
+    }
   };
 
   return (
@@ -106,8 +190,10 @@ const Avatar3D = () => {
       <div
         ref={showcaseRef}
         className="avatar-showcase avatar-showcase-panel"
+        onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
-        onPointerLeave={handlePointerLeave}
+        onPointerUp={handlePointerEnd}
+        onPointerCancel={handlePointerEnd}
       >
         <div ref={stageRef} className="avatar-letter-stage avatar-letter-stage-panel">
           <div className="avatar-logo-panel">
@@ -126,19 +212,9 @@ const Avatar3D = () => {
               ))}
             </div>
 
-            <div className="avatar-logo-word" aria-hidden="true">
-              {brandLetters.map((letter, index) => (
-                <span
-                  key={index}
-                  className={`avatar-logo-letter${index === 1 || index === 2 ? ' is-hot' : ''}`}
-                  style={{
-                    '--letter-delay': `${index * 0.18}s`,
-                    '--letter-shift': `${(index % 2 === 0 ? -1 : 1) * (3 + (index % 3))}px`,
-                  }}
-                >
-                  {letter}
-                </span>
-              ))}
+            <div className="avatar-logo-rotor">
+              {renderLogoWord('avatar-logo-word-front')}
+              {renderLogoWord('avatar-logo-word-back')}
             </div>
           </div>
         </div>
