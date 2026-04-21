@@ -3,6 +3,22 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 const Avatar3D = () => {
   const { t } = useLanguage();
+  const brand = t('hero.brand') || 'RENDIX';
+  const brandLetters = Array.from(brand.replace(/\s+/g, ''));
+  const sparks = [
+    { x: '14%', y: '18%', size: '4px', delay: '0.2s' },
+    { x: '25%', y: '30%', size: '3px', delay: '1.4s' },
+    { x: '35%', y: '22%', size: '5px', delay: '0.8s' },
+    { x: '49%', y: '16%', size: '4px', delay: '1.9s' },
+    { x: '63%', y: '28%', size: '3px', delay: '1.1s' },
+    { x: '78%', y: '20%', size: '4px', delay: '0.5s' },
+    { x: '18%', y: '62%', size: '3px', delay: '2.2s' },
+    { x: '32%', y: '54%', size: '4px', delay: '1.6s' },
+    { x: '58%', y: '60%', size: '5px', delay: '0.9s' },
+    { x: '71%', y: '52%', size: '3px', delay: '2.5s' },
+    { x: '83%', y: '72%', size: '4px', delay: '1.3s' },
+    { x: '44%', y: '68%', size: '3px', delay: '0.4s' },
+  ];
   const showcaseRef = useRef(null);
   const stageRef = useRef(null);
   const frameRef = useRef(0);
@@ -129,12 +145,32 @@ const Avatar3D = () => {
         <span className="avatar-orbit avatar-orbit-one" />
         <span className="avatar-orbit avatar-orbit-two" />
         <div ref={stageRef} className="avatar-letter-stage avatar-letter-stage-panel glass-panel">
-          <span className="avatar-core-mark">RDX</span>
-          <span className="avatar-core-title avatar-core-title-panel">{t('hero.brand')}</span>
-          <span className="avatar-core-divider" />
-          <div className="avatar-word-caption">
-            <span className="avatar-word-line" />
-            <span>{t('hero.kicker')}</span>
+          <div className="avatar-logo-panel">
+            <div className="avatar-logo-noise" aria-hidden="true">
+              {sparks.map((spark, index) => (
+                <span
+                  key={`${spark.x}-${spark.y}-${index}`}
+                  className="avatar-logo-spark"
+                  style={{
+                    '--spark-x': spark.x,
+                    '--spark-y': spark.y,
+                    '--spark-size': spark.size,
+                    '--spark-delay': spark.delay,
+                  }}
+                />
+              ))}
+            </div>
+
+            <div className="avatar-logo-word" aria-hidden="true">
+              {brandLetters.map((letter, index) => (
+                <span
+                  key={`${letter}-${index}`}
+                  className={`avatar-logo-letter${index === 1 || index === 2 ? ' is-hot' : ''}`}
+                >
+                  {letter}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
 
