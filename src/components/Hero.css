@@ -173,6 +173,17 @@
   color: rgba(255, 255, 255, 0.68);
 }
 
+.avatar-3d-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar-3d-canvas {
+  position: absolute !important;
+  inset: 0;
+  z-index: 2;
+}
+
 .avatar-3d-wrapper > div,
 .avatar-3d-wrapper canvas {
   width: 100% !important;
@@ -180,12 +191,19 @@
 }
 
 .avatar-showcase {
-  position: relative;
-  width: min(100%, 620px);
-  aspect-ratio: 1 / 1;
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.avatar-showcase-fallback {
+  background:
+    radial-gradient(circle at center, rgba(230, 57, 70, 0.18), transparent 42%),
+    linear-gradient(180deg, rgba(15, 15, 15, 0.18), rgba(3, 3, 3, 0));
 }
 
 .avatar-orbit {
