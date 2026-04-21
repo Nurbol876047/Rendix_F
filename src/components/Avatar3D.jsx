@@ -1,118 +1,223 @@
-import { useEffect, useRef } from 'react';
+import { Suspense, useMemo, useRef } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Center, Text3D } from '@react-three/drei';
+import fontUrl from 'three/examples/fonts/helvetiker_bold.typeface.json?url';
+import CanvasResizeSync, { useElementSize } from './CanvasResizeSync';
 import { useLanguage } from '../contexts/LanguageContext';
+
+const HOT_LETTER_INDICES = new Set([1, 2]);
+
+const buildParticles = () =>
+  Array.from({ length: 24 }, (_, index) => {
+    const angle = (index / 24) * Math.PI * 2;
+    const radiusX = 2.9 + (index % 4) * 0.24;
+    const radiusY = 1.1 + (index % 5) * 0.14;
+
+    return {
+      baseX: Math.cos(angle) * radiusX,
+      baseY: Math.sin(angle) * radiusY,
+      baseZ: ((index % 5) - 2) * 0.18,
+      drift: 0.08 + (index % 3) * 0.03,
+      pulse: 0.75 + (index % 4) * 0.12,
+      size: 0.03 + (index % 4) * 0.008,
+      speed: 0.45 + (index % 5) * 0.08,
+      phase: index * 0.47,
+      color: index % 3 === 0 ? '#ffc487' : '#ff4f63',
+      geometry: index % 2 === 0 ? 'octa' : 'tetra',
+    };
+  });
+
+const LogoParticles = () => {
+  const particleRefs = useRef([]);
+  const particles = useMemo(buildParticles, []);
+
+  useFrame(({ clock }) => {
+    const elapsed = clock.getElapsedTime();
+
+    particleRefs.current.forEach((mesh, index) => {
+      const particle = particles[index];
+
+      if (!mesh || !particle) {
+        return;
+      }
+
+      mesh.position.x = particle.baseX + Math.cos(elapsed * particle.speed + particle.phase) * particle.drift;
+      mesh.position.y =
+        particle.baseY + Math.sin(elapsed * (particle.speed + 0.22) + particle.phase) * particle.drift;
+      mesh.position.z =
+        particle.baseZ + Math.sin(elapsed * (particle.speed + 0.38) + particle.phase) * 0.12;
+
+      mesh.rotation.x += 0.012 + index * 0.0007;
+      mesh.rotation.y += 0.016 + index * 0.0008;
+
+      const scale = 0.82 + Math.sin(elapsed * particle.pulse + particle.phase) * 0.28;
+      mesh.scale.setScalar(scale);
+    });
+  });
+
+  return (
+    <group>
+      {particles.map((particle, index) => (
+        <mesh
+          key={index}
+          ref={(node) => {
+            particleRefs.current[index] = node;
+          }}
+          position={[particle.baseX, particle.baseY, particle.baseZ]}
+        >
+          {particle.geometry === 'octa' ? (
+            <octahedronGeometry args={[particle.size, 0]} />
+          ) : (
+            <tetrahedronGeometry args={[particle.size, 0]} />
+          )}
+          <meshStandardMaterial
+            color={particle.color}
+            emissive={particle.color}
+            emissiveIntensity={2.2}
+            metalness={0.18}
+            roughness={0.26}
+            toneMapped={false}
+          />
+        </mesh>
+      ))}
+    </group>
+  );
+};
+
+const RendixLetters = ({ brand }) => {
+  const letters = useMemo(() => Array.from(brand.replace(/\s+/g, '')), [brand]);
+  const spacing = 1.03;
+  const offset = ((letters.length - 1) * spacing) / 2;
+
+  return (
+    <group scale={[1.18, 1.18, 1.18]}>
+      {letters.map((letter, index) => {
+        const isHot = HOT_LETTER_INDICES.has(index);
+
+        return (
+          <group key={`${letter}-${index}`} position={[index * spacing - offset, 0, 0]}>
+            <Center>
+              <Text3D
+                font={fontUrl}
+                size={0.78}
+                height={0.28}
+                curveSegments={18}
+                bevelEnabled
+                bevelThickness={0.022}
+                bevelSize={0.02}
+                bevelOffset={0}
+                bevelSegments={7}
+              >
+                {letter}
+                <meshPhysicalMaterial
+                  attach="material-0"
+                  color={isHot ? '#ffd3a0' : '#ff5b69'}
+                  emissive={isHot ? '#ff9561' : '#ff3049'}
+                  emissiveIntensity={isHot ? 1.7 : 1.15}
+                  metalness={0.24}
+                  roughness={0.15}
+                  clearcoat={1}
+                  clearcoatRoughness={0.12}
+                  toneMapped={false}
+                />
+                <meshStandardMaterial
+                  attach="material-1"
+                  color={isHot ? '#a63d29' : '#5e0e1d'}
+                  emissive={isHot ? '#ff7448' : '#be1b31'}
+                  emissiveIntensity={isHot ? 0.48 : 0.34}
+                  metalness={0.46}
+                  roughness={0.34}
+                  toneMapped={false}
+                />
+              </Text3D>
+            </Center>
+          </group>
+        );
+      })}
+    </group>
+  );
+};
+
+const LogoScene = ({ brand, dragRef, targetRotationRef, velocityRef }) => {
+  const logoGroupRef = useRef(null);
+  const currentRotationRef = useRef({ x: -0.08, y: 0 });
+
+  useFrame(({ clock }) => {
+    const elapsed = clock.getElapsedTime();
+
+    if (!dragRef.current.active) {
+      targetRotationRef.current.x += velocityRef.current.x;
+      targetRotationRef.current.y += velocityRef.current.y;
+      velocityRef.current.x *= 0.92;
+      velocityRef.current.y *= 0.92;
+
+      targetRotationRef.current.x += (-0.08 - targetRotationRef.current.x) * 0.06;
+      targetRotationRef.current.y += (0 - targetRotationRef.current.y) * 0.045;
+
+      if (Math.abs(velocityRef.current.x) < 0.0004) {
+        velocityRef.current.x = 0;
+      }
+
+      if (Math.abs(velocityRef.current.y) < 0.0004) {
+        velocityRef.current.y = 0;
+      }
+    }
+
+    currentRotationRef.current.x +=
+      (targetRotationRef.current.x - currentRotationRef.current.x) * 0.12;
+    currentRotationRef.current.y +=
+      (targetRotationRef.current.y - currentRotationRef.current.y) * 0.12;
+
+    if (!logoGroupRef.current) {
+      return;
+    }
+
+    logoGroupRef.current.rotation.x = currentRotationRef.current.x + Math.sin(elapsed * 0.9) * 0.025;
+    logoGroupRef.current.rotation.y = currentRotationRef.current.y + Math.cos(elapsed * 0.65) * 0.04;
+    logoGroupRef.current.position.y = Math.sin(elapsed * 1.1) * 0.08;
+    logoGroupRef.current.position.z = Math.cos(elapsed * 0.85) * 0.04;
+  });
+
+  return (
+    <>
+      <ambientLight intensity={0.42} />
+      <hemisphereLight intensity={0.95} color="#fff0ec" groundColor="#140204" />
+      <directionalLight position={[4.8, 5.4, 4.8]} intensity={2.8} color="#ffd8c8" />
+      <pointLight position={[0, 0.4, 4.4]} intensity={32} distance={13} color="#ff9f71" decay={2} />
+      <pointLight position={[0, -0.4, 3.2]} intensity={18} distance={10} color="#ff2e49" decay={2} />
+      <pointLight position={[-2.6, 1.6, 2.2]} intensity={6} distance={8} color="#ffffff" decay={2} />
+
+      <group ref={logoGroupRef}>
+        <RendixLetters brand={brand} />
+        <LogoParticles />
+      </group>
+    </>
+  );
+};
 
 const Avatar3D = () => {
   const { t } = useLanguage();
-  const brand = t('hero.brand') || 'RENDIX';
-  const brandLetters = Array.from(brand.replace(/\s+/g, ''));
-  const sparks = [
-    { x: '9%', y: '33%', size: '2px', delay: '0.2s', type: 'star' },
-    { x: '14%', y: '25%', size: '4px', delay: '0.7s' },
-    { x: '18%', y: '43%', size: '3px', delay: '1.9s' },
-    { x: '24%', y: '29%', size: '3px', delay: '1.3s', type: 'star' },
-    { x: '31%', y: '23%', size: '4px', delay: '0.5s' },
-    { x: '38%', y: '43%', size: '3px', delay: '2.4s' },
-    { x: '43%', y: '19%', size: '5px', delay: '1.2s' },
-    { x: '49%', y: '48%', size: '2px', delay: '0.4s', type: 'star' },
-    { x: '54%', y: '24%', size: '4px', delay: '2.1s' },
-    { x: '60%', y: '42%', size: '3px', delay: '0.9s' },
-    { x: '66%', y: '21%', size: '3px', delay: '1.6s', type: 'star' },
-    { x: '73%', y: '29%', size: '4px', delay: '0.3s' },
-    { x: '81%', y: '45%', size: '3px', delay: '2.6s' },
-    { x: '87%', y: '31%', size: '2px', delay: '1.1s', type: 'star' },
-    { x: '22%', y: '61%', size: '3px', delay: '2s' },
-    { x: '33%', y: '67%', size: '2px', delay: '0.8s', type: 'star' },
-    { x: '46%', y: '72%', size: '4px', delay: '1.8s' },
-    { x: '59%', y: '64%', size: '3px', delay: '0.6s' },
-    { x: '71%', y: '69%', size: '2px', delay: '2.2s', type: 'star' },
-    { x: '79%', y: '61%', size: '3px', delay: '1.4s' },
-  ];
-  const showcaseRef = useRef(null);
-  const stageRef = useRef(null);
-  const frameRef = useRef(0);
-  const idleStartRef = useRef(0);
-  const currentRef = useRef({ rotateX: -8, rotateY: 0, floatY: 0 });
-  const targetRef = useRef({ rotateX: -8, rotateY: 0 });
-  const velocityRef = useRef({ rotateX: 0, rotateY: 0 });
+  const brand = (t('hero.brand') || 'RENDIX').replace(/\s+/g, '');
+  const [canvasHostRef, canvasSize] = useElementSize();
+  const shellRef = useRef(null);
+  const targetRotationRef = useRef({ x: -0.08, y: 0 });
+  const velocityRef = useRef({ x: 0, y: 0 });
   const dragRef = useRef({
     active: false,
     pointerId: null,
     startX: 0,
     startY: 0,
-    baseRotateX: -8,
+    baseRotateX: -0.08,
     baseRotateY: 0,
     lastX: 0,
     lastY: 0,
     lastTime: 0,
   });
 
-  useEffect(() => {
-    const stage = stageRef.current;
-
-    if (!stage) {
-      return undefined;
-    }
-
-    const applyTransforms = (idleRotateX = 0, idleRotateY = 0) => {
-      const renderedRotateX = currentRef.current.rotateX + idleRotateX;
-      const renderedRotateY = currentRef.current.rotateY + idleRotateY;
-      const normalizedRotateY = ((renderedRotateY % 360) + 360) % 360;
-      const wordFlip = normalizedRotateY > 90 && normalizedRotateY < 270 ? -1 : 1;
-
-      stage.style.setProperty('--avatar-rotate-x', `${renderedRotateX}deg`);
-      stage.style.setProperty('--avatar-rotate-y', `${renderedRotateY}deg`);
-      stage.style.setProperty('--avatar-float-y', `${currentRef.current.floatY ?? 0}px`);
-      stage.style.setProperty('--avatar-word-flip', wordFlip);
-    };
-
-    const animate = (timestamp) => {
-      if (!idleStartRef.current) {
-        idleStartRef.current = timestamp;
-      }
-
-      const elapsed = (timestamp - idleStartRef.current) / 1000;
-      const idleRotateX = dragRef.current.active ? 0 : Math.sin(elapsed * 0.92) * 1.2;
-      const idleRotateY = dragRef.current.active ? 0 : Math.cos(elapsed * 0.74) * 0.35;
-
-      if (!dragRef.current.active) {
-        targetRef.current.rotateX += velocityRef.current.rotateX;
-        targetRef.current.rotateY += velocityRef.current.rotateY;
-        velocityRef.current.rotateX *= 0.92;
-        velocityRef.current.rotateY *= 0.92;
-
-        const snappedY = Math.round(targetRef.current.rotateY / 180) * 180;
-        targetRef.current.rotateY += (snappedY - targetRef.current.rotateY) * 0.08;
-        targetRef.current.rotateX += (-8 - targetRef.current.rotateX) * 0.06;
-
-        if (Math.abs(velocityRef.current.rotateX) < 0.002) {
-          velocityRef.current.rotateX = 0;
-        }
-
-        if (Math.abs(velocityRef.current.rotateY) < 0.002) {
-          velocityRef.current.rotateY = 0;
-        }
-      }
-
-      currentRef.current.floatY = Math.sin(elapsed * 1.18) * -5.8;
-
-      currentRef.current.rotateX += (targetRef.current.rotateX - currentRef.current.rotateX) * 0.09;
-      currentRef.current.rotateY += (targetRef.current.rotateY - currentRef.current.rotateY) * 0.09;
-      applyTransforms(idleRotateX, idleRotateY);
-
-      frameRef.current = window.requestAnimationFrame(animate);
-    };
-
-    frameRef.current = window.requestAnimationFrame(animate);
-
-    return () => {
-      window.cancelAnimationFrame(frameRef.current);
-    };
-  }, []);
-
   const handlePointerDown = (event) => {
-    const showcase = showcaseRef.current;
+    const shell = shellRef.current;
 
-    if (!showcase) {
+    if (!shell) {
       return;
     }
 
@@ -121,17 +226,17 @@ const Avatar3D = () => {
       pointerId: event.pointerId,
       startX: event.clientX,
       startY: event.clientY,
-      baseRotateX: targetRef.current.rotateX,
-      baseRotateY: targetRef.current.rotateY,
+      baseRotateX: targetRotationRef.current.x,
+      baseRotateY: targetRotationRef.current.y,
       lastX: event.clientX,
       lastY: event.clientY,
       lastTime: performance.now(),
     };
 
-    velocityRef.current.rotateX = 0;
-    velocityRef.current.rotateY = 0;
-    showcase.classList.add('is-dragging');
-    showcase.setPointerCapture?.(event.pointerId);
+    velocityRef.current.x = 0;
+    velocityRef.current.y = 0;
+    shell.classList.add('is-dragging');
+    shell.setPointerCapture?.(event.pointerId);
   };
 
   const handlePointerMove = (event) => {
@@ -141,16 +246,16 @@ const Avatar3D = () => {
 
     const deltaX = event.clientX - dragRef.current.startX;
     const deltaY = event.clientY - dragRef.current.startY;
-    const rotateY = dragRef.current.baseRotateY + deltaX * 0.65;
-    const rotateX = Math.max(-18, Math.min(10, dragRef.current.baseRotateX - deltaY * 0.18));
+    const rotateY = dragRef.current.baseRotateY + deltaX * 0.011;
+    const rotateX = Math.max(-0.34, Math.min(0.16, dragRef.current.baseRotateX - deltaY * 0.0045));
     const now = performance.now();
     const elapsed = Math.max(16, now - dragRef.current.lastTime);
     const frameStep = elapsed / 16.67;
 
-    targetRef.current.rotateY = rotateY;
-    targetRef.current.rotateX = rotateX;
-    velocityRef.current.rotateY = (((event.clientX - dragRef.current.lastX) * 0.58) / frameStep) * 0.18;
-    velocityRef.current.rotateX = (((dragRef.current.lastY - event.clientY) * 0.46) / frameStep) * 0.18;
+    targetRotationRef.current.y = rotateY;
+    targetRotationRef.current.x = rotateX;
+    velocityRef.current.y = (((event.clientX - dragRef.current.lastX) * 0.011) / frameStep) * 0.16;
+    velocityRef.current.x = (((dragRef.current.lastY - event.clientY) * 0.0045) / frameStep) * 0.16;
 
     dragRef.current.lastX = event.clientX;
     dragRef.current.lastY = event.clientY;
@@ -158,63 +263,48 @@ const Avatar3D = () => {
   };
 
   const handlePointerEnd = (event) => {
-    const showcase = showcaseRef.current;
+    const shell = shellRef.current;
 
-    if (!dragRef.current.active || !showcase) {
+    if (!dragRef.current.active || !shell) {
       return;
     }
 
     dragRef.current.active = false;
     dragRef.current.pointerId = null;
-    showcase.classList.remove('is-dragging');
+    shell.classList.remove('is-dragging');
 
-    if (event?.pointerId !== undefined && showcase.hasPointerCapture?.(event.pointerId)) {
-      showcase.releasePointerCapture(event.pointerId);
+    if (event?.pointerId !== undefined && shell.hasPointerCapture?.(event.pointerId)) {
+      shell.releasePointerCapture(event.pointerId);
     }
   };
 
   return (
-    <div className="avatar-3d-wrapper" aria-label={t('hero.brand')}>
+    <div className="avatar-3d-wrapper" aria-label={brand}>
       <div
-        ref={showcaseRef}
-        className="avatar-showcase avatar-showcase-panel"
+        ref={shellRef}
+        className="avatar-webgl-shell"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerEnd}
         onPointerCancel={handlePointerEnd}
+        onPointerLeave={handlePointerEnd}
       >
-        <div ref={stageRef} className="avatar-letter-stage avatar-letter-stage-panel">
-          <div className="avatar-logo-panel">
-            <div className="avatar-logo-noise" aria-hidden="true">
-              {sparks.map((spark, index) => (
-                <span
-                  key={index}
-                  className={`avatar-logo-spark${spark.type === 'star' ? ' is-star' : ''}`}
-                  style={{
-                    '--spark-x': spark.x,
-                    '--spark-y': spark.y,
-                    '--spark-size': spark.size,
-                    '--spark-delay': spark.delay,
-                  }}
-                />
-              ))}
-            </div>
-
-            <div className="avatar-logo-word" aria-hidden="true">
-              {brandLetters.map((letter, index) => (
-                <span
-                  key={index}
-                  className={`avatar-logo-letter${index === 1 || index === 2 ? ' is-hot' : ''}`}
-                  style={{
-                    '--letter-delay': `${index * 0.18}s`,
-                    '--letter-shift': `${(index % 2 === 0 ? -1 : 1) * (3 + (index % 3))}px`,
-                  }}
-                >
-                  {letter}
-                </span>
-              ))}
-            </div>
-          </div>
+        <div ref={canvasHostRef} className="avatar-webgl-host">
+          <Canvas
+            dpr={[1.25, 2.2]}
+            camera={{ position: [0, 0, 8.1], fov: 30 }}
+            gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}
+          >
+            <CanvasResizeSync width={canvasSize.width} height={canvasSize.height} />
+            <Suspense fallback={null}>
+              <LogoScene
+                brand={brand}
+                dragRef={dragRef}
+                targetRotationRef={targetRotationRef}
+                velocityRef={velocityRef}
+              />
+            </Suspense>
+          </Canvas>
         </div>
       </div>
     </div>

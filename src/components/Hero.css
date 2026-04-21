@@ -186,6 +186,35 @@
   height: 100% !important;
 }
 
+.avatar-webgl-shell {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.avatar-webgl-shell.is-dragging {
+  cursor: grabbing;
+}
+
+.avatar-webgl-host {
+  width: min(100%, 760px);
+  height: min(100%, 560px);
+  min-height: 420px;
+  filter: saturate(1.08) contrast(1.04);
+}
+
+.avatar-webgl-host canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none;
+}
+
 .avatar-showcase {
   position: absolute;
   inset: 0;
@@ -619,6 +648,11 @@
     width: min(100%, 500px);
     min-height: 290px;
     padding: 1.6rem 0.4rem;
+  }
+
+  .avatar-webgl-host {
+    width: min(100%, 560px);
+    min-height: 300px;
   }
 
   .avatar-logo-word {
