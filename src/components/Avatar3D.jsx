@@ -9,6 +9,7 @@ import {
   PerspectiveCamera,
   Sparkles
 } from '@react-three/drei';
+import CanvasResizeSync, { useElementSize } from './CanvasResizeSync';
 
 function RendixLogo() {
   const textRef = useRef();
@@ -62,9 +63,16 @@ function RendixLogo() {
 }
 
 const Avatar3D = () => {
+  const [containerRef, size] = useElementSize();
+
   return (
-    <div className="avatar-3d-wrapper" style={{ width: '100%', height: '100%', minHeight: '600px', cursor: 'grab' }}>
+    <div
+      ref={containerRef}
+      className="avatar-3d-wrapper"
+      style={{ width: '100%', height: '100%', minHeight: '600px', cursor: 'grab' }}
+    >
       <Canvas shadows dpr={[1, 1.5]}>
+        <CanvasResizeSync width={size.width} height={size.height} />
         <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={35} />
         
         <ambientLight intensity={0.7} />

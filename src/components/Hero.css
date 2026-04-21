@@ -173,6 +173,12 @@
   color: rgba(255, 255, 255, 0.68);
 }
 
+.avatar-3d-wrapper > div,
+.avatar-3d-wrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
 .avatar-showcase {
   position: relative;
   width: min(100%, 620px);

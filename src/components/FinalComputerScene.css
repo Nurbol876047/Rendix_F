@@ -53,6 +53,12 @@
   cursor: grab;
 }
 
+.final-computer-canvas > div,
+.final-computer-canvas canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
 .final-computer-canvas:active {
   cursor: grabbing;
 }

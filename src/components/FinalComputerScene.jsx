@@ -8,6 +8,7 @@ import {
   useGLTF,
 } from '@react-three/drei';
 import './FinalComputerScene.css';
+import CanvasResizeSync, { useElementSize } from './CanvasResizeSync';
 
 const createMonitorTexture = () => {
   const canvas = document.createElement('canvas');
@@ -121,62 +122,66 @@ const ComputerModel = () => {
 useGLTF.preload('/models/computer.glb');
 
 const FinalComputerScene = () => {
+  const [canvasHostRef, canvasSize] = useElementSize();
+
   return (
     <section className="final-computer">
       <div className="container">
         <div className="final-computer-shell glass-panel">
-          <Canvas
-            className="final-computer-canvas"
-            shadows
-            dpr={[1, 1.75]}
-            camera={{ position: [0, 0.9, 8.2], fov: 30 }}
-          >
-            <ambientLight intensity={1} />
-            <hemisphereLight intensity={0.5} color="#ffffff" groundColor="#e63946" />
-            <directionalLight
-              castShadow
-              position={[6, 7, 5]}
-              intensity={3}
-              color="#ff6a6a"
-              shadow-mapSize-width={1024}
-              shadow-mapSize-height={1024}
-            />
-            <pointLight position={[-4, 2, -4]} intensity={2} color="#ffffff" />
-            <pointLight position={[0, 1.4, 4]} intensity={2.5} color="#e63946" />
+          <div ref={canvasHostRef} className="final-computer-canvas">
+            <Canvas
+              shadows
+              dpr={[1, 1.75]}
+              camera={{ position: [0, 0.9, 8.2], fov: 30 }}
+            >
+              <CanvasResizeSync width={canvasSize.width} height={canvasSize.height} />
+              <ambientLight intensity={1} />
+              <hemisphereLight intensity={0.5} color="#ffffff" groundColor="#e63946" />
+              <directionalLight
+                castShadow
+                position={[6, 7, 5]}
+                intensity={3}
+                color="#ff6a6a"
+                shadow-mapSize-width={1024}
+                shadow-mapSize-height={1024}
+              />
+              <pointLight position={[-4, 2, -4]} intensity={2} color="#ffffff" />
+              <pointLight position={[0, 1.4, 4]} intensity={2.5} color="#e63946" />
 
-            <Suspense fallback={null}>
-              <Center>
-                <group scale={2.15} position={[0, -3.05, 0]} rotation={[0, -0.12, 0]}>
-                  <ComputerModel />
-                </group>
-              </Center>
-            </Suspense>
+              <Suspense fallback={null}>
+                <Center>
+                  <group scale={2.15} position={[0, -3.05, 0]} rotation={[0, -0.12, 0]}>
+                    <ComputerModel />
+                  </group>
+                </Center>
+              </Suspense>
 
-            <ContactShadows
-              position={[0, -3.7, 0]}
-              opacity={0.4}
-              scale={10}
-              blur={2.6}
-              far={6.5}
-            />
+              <ContactShadows
+                position={[0, -3.7, 0]}
+                opacity={0.4}
+                scale={10}
+                blur={2.6}
+                far={6.5}
+              />
 
-            <OrbitControls
-              makeDefault
-              enablePan
-              enableZoom
-              enableRotate
-              enableDamping
-              dampingFactor={0.06}
-              rotateSpeed={0.9}
-              zoomSpeed={0.9}
-              panSpeed={0.8}
-              minDistance={4.2}
-              maxDistance={14}
-              target={[0, -0.25, 0]}
-              minPolarAngle={0}
-              maxPolarAngle={Math.PI}
-            />
-          </Canvas>
+              <OrbitControls
+                makeDefault
+                enablePan
+                enableZoom
+                enableRotate
+                enableDamping
+                dampingFactor={0.06}
+                rotateSpeed={0.9}
+                zoomSpeed={0.9}
+                panSpeed={0.8}
+                minDistance={4.2}
+                maxDistance={14}
+                target={[0, -0.25, 0]}
+                minPolarAngle={0}
+                maxPolarAngle={Math.PI}
+              />
+            </Canvas>
+          </div>
         </div>
       </div>
     </section>
