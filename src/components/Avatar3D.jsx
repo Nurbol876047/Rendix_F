@@ -113,12 +113,12 @@ const FloatingLetter = ({ letter, index, total }) => {
       <Center>
         <Text3D
           font={fontUrl}
-          size={0.46}
-          height={0.22}
+          size={0.5}
+          height={0.24}
           curveSegments={20}
           bevelEnabled
-          bevelThickness={0.02}
-          bevelSize={0.014}
+          bevelThickness={0.022}
+          bevelSize={0.015}
           bevelOffset={0}
           bevelSegments={8}
         >
@@ -153,7 +153,7 @@ const RendixLetters = ({ brand }) => {
   const letters = useMemo(() => Array.from(brand.replace(/\s+/g, '')), [brand]);
 
   return (
-    <group scale={[0.64, 0.64, 0.64]}>
+    <group scale={[0.7, 0.7, 0.7]}>
       {letters.map((letter, index) => (
         <FloatingLetter
           key={`${letter}-${index}`}
@@ -176,11 +176,8 @@ const LogoScene = ({ brand, dragRef, targetRotationRef, velocityRef }) => {
     if (!dragRef.current.active) {
       targetRotationRef.current.x += velocityRef.current.x;
       targetRotationRef.current.y += velocityRef.current.y;
-      velocityRef.current.x *= 0.92;
-      velocityRef.current.y *= 0.92;
-
-      targetRotationRef.current.x += (-0.1 - targetRotationRef.current.x) * 0.06;
-      targetRotationRef.current.y += (0 - targetRotationRef.current.y) * 0.035;
+      velocityRef.current.x *= 0.94;
+      velocityRef.current.y *= 0.94;
 
       if (Math.abs(velocityRef.current.x) < 0.00035) {
         velocityRef.current.x = 0;
@@ -273,16 +270,16 @@ const Avatar3D = () => {
 
     const deltaX = event.clientX - dragRef.current.startX;
     const deltaY = event.clientY - dragRef.current.startY;
-    const rotateY = dragRef.current.baseRotateY + deltaX * 0.0105;
-    const rotateX = Math.max(-0.3, Math.min(0.12, dragRef.current.baseRotateX - deltaY * 0.0038));
+    const rotateY = dragRef.current.baseRotateY + deltaX * 0.011;
+    const rotateX = Math.max(-1.05, Math.min(0.9, dragRef.current.baseRotateX - deltaY * 0.005));
     const now = performance.now();
     const elapsed = Math.max(16, now - dragRef.current.lastTime);
     const frameStep = elapsed / 16.67;
 
     targetRotationRef.current.y = rotateY;
     targetRotationRef.current.x = rotateX;
-    velocityRef.current.y = (((event.clientX - dragRef.current.lastX) * 0.0105) / frameStep) * 0.16;
-    velocityRef.current.x = (((dragRef.current.lastY - event.clientY) * 0.0038) / frameStep) * 0.16;
+    velocityRef.current.y = (((event.clientX - dragRef.current.lastX) * 0.011) / frameStep) * 0.18;
+    velocityRef.current.x = (((dragRef.current.lastY - event.clientY) * 0.005) / frameStep) * 0.18;
 
     dragRef.current.lastX = event.clientX;
     dragRef.current.lastY = event.clientY;
@@ -314,7 +311,6 @@ const Avatar3D = () => {
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerEnd}
         onPointerCancel={handlePointerEnd}
-        onPointerLeave={handlePointerEnd}
       >
         <div className="avatar-webgl-host">
           <Canvas
