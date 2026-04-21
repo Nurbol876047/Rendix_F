@@ -25,19 +25,11 @@ const Avatar3D = () => {
   const idleStartRef = useRef(0);
   const currentRef = useRef({ rotateX: -8, rotateY: 12 });
   const targetRef = useRef({ rotateX: -8, rotateY: 12 });
-  const dragRef = useRef({
-    active: false,
-    startX: 0,
-    startY: 0,
-    baseRotateX: -8,
-    baseRotateY: 12,
-  });
 
   useEffect(() => {
     const stage = stageRef.current;
-    const showcase = showcaseRef.current;
 
-    if (!stage || !showcase) {
+    if (!stage) {
       return undefined;
     }
 
@@ -51,11 +43,9 @@ const Avatar3D = () => {
         idleStartRef.current = timestamp;
       }
 
-      if (!dragRef.current.active) {
-        const elapsed = (timestamp - idleStartRef.current) / 1000;
-        targetRef.current.rotateX = -7 + Math.sin(elapsed * 1.1) * 3.8;
-        targetRef.current.rotateY = 10 + Math.cos(elapsed * 0.9) * 10.5;
-      }
+      const elapsed = (timestamp - idleStartRef.current) / 1000;
+      targetRef.current.rotateX = -7 + Math.sin(elapsed * 1.1) * 3.8;
+      targetRef.current.rotateY = 10 + Math.cos(elapsed * 0.9) * 10.5;
 
       currentRef.current.rotateX += (targetRef.current.rotateX - currentRef.current.rotateX) * 0.09;
       currentRef.current.rotateY += (targetRef.current.rotateY - currentRef.current.rotateY) * 0.09;
@@ -64,7 +54,6 @@ const Avatar3D = () => {
       frameRef.current = window.requestAnimationFrame(animate);
     };
 
-    applyTransforms();
     frameRef.current = window.requestAnimationFrame(animate);
 
     return () => {
@@ -72,38 +61,10 @@ const Avatar3D = () => {
     };
   }, []);
 
-  const handlePointerDown = (event) => {
-    const showcase = showcaseRef.current;
-
-    if (!showcase) {
-      return;
-    }
-
-    dragRef.current = {
-      active: true,
-      startX: event.clientX,
-      startY: event.clientY,
-      baseRotateX: currentRef.current.rotateX,
-      baseRotateY: currentRef.current.rotateY,
-    };
-
-    showcase.classList.add('is-dragging');
-    showcase.setPointerCapture?.(event.pointerId);
-  };
-
   const handlePointerMove = (event) => {
     const showcase = showcaseRef.current;
 
     if (!showcase) {
-      return;
-    }
-
-    if (dragRef.current.active) {
-      const deltaX = event.clientX - dragRef.current.startX;
-      const deltaY = event.clientY - dragRef.current.startY;
-
-      targetRef.current.rotateY = dragRef.current.baseRotateY + deltaX * 0.18;
-      targetRef.current.rotateX = dragRef.current.baseRotateX - deltaY * 0.14;
       return;
     }
 
@@ -117,37 +78,19 @@ const Avatar3D = () => {
     targetRef.current.rotateX = normalizedY * -10;
   };
 
-  const handlePointerLeave = (event) => {
-    const showcase = showcaseRef.current;
-
-    if (showcase) {
-      showcase.classList.remove('is-dragging');
-      if (event?.pointerId !== undefined && showcase.hasPointerCapture?.(event.pointerId)) {
-        showcase.releasePointerCapture(event.pointerId);
-      }
-    }
-
-    dragRef.current.active = false;
-    idleStartRef.current = performance.now();
-  };
-
   return (
     <div className="avatar-3d-wrapper" aria-label={t('hero.brand')}>
       <div
         ref={showcaseRef}
         className="avatar-showcase avatar-showcase-panel"
-        onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerLeave}
-        onPointerCancel={handlePointerLeave}
-        onPointerLeave={handlePointerLeave}
       >
         <div ref={stageRef} className="avatar-letter-stage avatar-letter-stage-panel">
           <div className="avatar-logo-panel">
             <div className="avatar-logo-noise" aria-hidden="true">
               {sparks.map((spark, index) => (
                 <span
-                  key={`${spark.x}-${spark.y}-${index}`}
+                  key={index}
                   className="avatar-logo-spark"
                   style={{
                     '--spark-x': spark.x,
@@ -162,7 +105,7 @@ const Avatar3D = () => {
             <div className="avatar-logo-word" aria-hidden="true">
               {brandLetters.map((letter, index) => (
                 <span
-                  key={`${letter}-${index}`}
+                  key={index}
                   className={`avatar-logo-letter${index === 1 || index === 2 ? ' is-hot' : ''}`}
                 >
                   {letter}

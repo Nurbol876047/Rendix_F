@@ -213,19 +213,14 @@
   perspective: 1600px;
   pointer-events: auto;
   cursor: grab;
-  user-select: none;
   touch-action: none;
   background: transparent;
-}
-
-.avatar-showcase-panel.is-dragging {
-  cursor: grabbing;
 }
 
 .avatar-letter-stage {
   position: relative;
   width: min(100%, 620px);
-  min-height: min(64vw, 420px);
+  min-height: 340px;
   padding: 1.5rem;
   display: flex;
   align-items: center;
@@ -234,7 +229,7 @@
 
 .avatar-letter-stage-panel {
   width: min(100%, 560px);
-  min-height: min(58vw, 340px);
+  min-height: 340px;
   padding: 2rem 1rem;
   transform-style: preserve-3d;
   transform:
@@ -268,7 +263,6 @@
 .avatar-logo-noise {
   position: absolute;
   inset: 0;
-  transform: translateZ(36px);
 }
 
 .avatar-logo-spark {
@@ -279,11 +273,10 @@
   height: var(--spark-size);
   border-radius: 999px;
   background: rgba(255, 69, 86, 0.9);
-  box-shadow:
-    0 0 10px rgba(255, 69, 86, 0.9),
-    0 0 22px rgba(255, 69, 86, 0.45);
+  box-shadow: 0 0 10px rgba(255, 69, 86, 0.9);
   animation: avatarSparkPulse 3.6s ease-in-out infinite;
   animation-delay: var(--spark-delay);
+  transform: translateZ(36px);
 }
 
 .avatar-logo-word {
@@ -467,11 +460,11 @@
 @keyframes avatarSparkPulse {
   0%,
   100% {
-    transform: scale(0.7);
+    transform: translateZ(36px) scale(0.7);
     opacity: 0.4;
   }
   50% {
-    transform: scale(1.2);
+    transform: translateZ(36px) scale(1.2);
     opacity: 1;
   }
 }
@@ -554,7 +547,7 @@
 
   .avatar-letter-stage-panel {
     width: min(100%, 420px);
-    min-height: min(74vw, 250px);
+    min-height: 250px;
     padding: 1.5rem 0.4rem;
   }
 
