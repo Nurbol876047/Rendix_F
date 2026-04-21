@@ -212,15 +212,15 @@
 .avatar-showcase-panel {
   perspective: 1600px;
   pointer-events: auto;
-  cursor: grab;
+  cursor: default;
   touch-action: none;
   background: transparent;
 }
 
 .avatar-letter-stage {
   position: relative;
-  width: min(100%, 620px);
-  min-height: 340px;
+  width: min(100%, 700px);
+  min-height: 390px;
   padding: 1.5rem;
   display: flex;
   align-items: center;
@@ -228,11 +228,12 @@
 }
 
 .avatar-letter-stage-panel {
-  width: min(100%, 560px);
-  min-height: 340px;
-  padding: 2rem 1rem;
+  width: min(100%, 620px);
+  min-height: 390px;
+  padding: 2.25rem 1rem;
   transform-style: preserve-3d;
   transform:
+    translateY(var(--avatar-float-y, 0px))
     rotateX(var(--avatar-rotate-x, -8deg))
     rotateY(var(--avatar-rotate-y, 12deg))
     translateZ(0);
@@ -253,16 +254,18 @@
 .avatar-logo-panel::before {
   content: '';
   position: absolute;
-  inset: 24% 18%;
+  inset: 27% 16% 25%;
   background:
-    radial-gradient(circle, rgba(255, 114, 114, 0.22), rgba(230, 57, 70, 0.14) 28%, transparent 72%);
-  filter: blur(26px);
+    radial-gradient(circle, rgba(255, 126, 126, 0.26), rgba(230, 57, 70, 0.18) 26%, transparent 74%);
+  filter: blur(34px);
   transform: translateZ(14px);
+  animation: avatarGlowPulse 6.8s ease-in-out infinite;
 }
 
 .avatar-logo-noise {
   position: absolute;
   inset: 0;
+  transform-style: preserve-3d;
 }
 
 .avatar-logo-spark {
@@ -273,10 +276,40 @@
   height: var(--spark-size);
   border-radius: 999px;
   background: rgba(255, 69, 86, 0.9);
-  box-shadow: 0 0 10px rgba(255, 69, 86, 0.9);
+  color: rgba(255, 69, 86, 0.95);
+  box-shadow:
+    0 0 10px rgba(255, 69, 86, 0.9),
+    0 0 24px rgba(255, 69, 86, 0.4);
   animation: avatarSparkPulse 3.6s ease-in-out infinite;
   animation-delay: var(--spark-delay);
   transform: translateZ(36px);
+}
+
+.avatar-logo-spark.is-star {
+  background: transparent;
+  box-shadow: none;
+}
+
+.avatar-logo-spark.is-star::before,
+.avatar-logo-spark.is-star::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+  transform: translate(-50%, -50%);
+}
+
+.avatar-logo-spark.is-star::before {
+  width: calc(var(--spark-size) * 2.4);
+  height: 1px;
+}
+
+.avatar-logo-spark.is-star::after {
+  width: 1px;
+  height: calc(var(--spark-size) * 2.4);
 }
 
 .avatar-logo-word {
@@ -285,23 +318,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(0.38rem, 1vw, 0.8rem);
+  gap: clamp(0.42rem, 1.1vw, 0.95rem);
   width: 100%;
   padding: 0 0.3rem;
   transform: translateZ(58px);
+  animation: avatarWordDrift 7.2s ease-in-out infinite;
 }
 
 .avatar-logo-letter {
+  display: inline-block;
   font-family: var(--font-heading);
-  font-size: clamp(2rem, 4.6vw, 3.4rem);
+  font-size: clamp(2.45rem, 5.8vw, 4.6rem);
   font-weight: 500;
   letter-spacing: 0.02em;
   line-height: 1;
   text-transform: uppercase;
   color: #e63946;
   text-shadow:
-    0 0 12px rgba(230, 57, 70, 0.38),
-    0 0 32px rgba(230, 57, 70, 0.22);
+    0 0 14px rgba(230, 57, 70, 0.42),
+    0 0 40px rgba(230, 57, 70, 0.24);
+  animation: avatarLetterFloat 4.8s ease-in-out infinite;
+  animation-delay: var(--letter-delay, 0s);
 }
 
 .avatar-logo-letter.is-hot {
@@ -310,7 +347,7 @@
   background-clip: text;
   color: transparent;
   text-shadow: none;
-  filter: drop-shadow(0 0 16px rgba(255, 172, 108, 0.5));
+  filter: drop-shadow(0 0 18px rgba(255, 172, 108, 0.58));
 }
 
 .avatar-letter-grid {
@@ -461,10 +498,44 @@
   0%,
   100% {
     transform: translateZ(36px) scale(0.7);
-    opacity: 0.4;
+    opacity: 0.35;
   }
   50% {
-    transform: translateZ(36px) scale(1.2);
+    transform: translateZ(36px) scale(1.26);
+    opacity: 1;
+  }
+}
+
+@keyframes avatarGlowPulse {
+  0%,
+  100% {
+    opacity: 0.62;
+    transform: translateZ(14px) scale(0.92);
+  }
+  50% {
+    opacity: 1;
+    transform: translateZ(14px) scale(1.08);
+  }
+}
+
+@keyframes avatarWordDrift {
+  0%,
+  100% {
+    transform: translateZ(58px) translateY(0px);
+  }
+  50% {
+    transform: translateZ(58px) translateY(-4px);
+  }
+}
+
+@keyframes avatarLetterFloat {
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+    opacity: 0.92;
+  }
+  50% {
+    transform: translateY(var(--letter-shift, -4px)) scale(1.03);
     opacity: 1;
   }
 }
@@ -546,16 +617,16 @@
   }
 
   .avatar-letter-stage-panel {
-    width: min(100%, 420px);
-    min-height: 250px;
-    padding: 1.5rem 0.4rem;
+    width: min(100%, 500px);
+    min-height: 290px;
+    padding: 1.6rem 0.4rem;
   }
 
   .avatar-logo-word {
-    gap: clamp(0.22rem, 0.8vw, 0.42rem);
+    gap: clamp(0.26rem, 0.9vw, 0.5rem);
   }
 
   .avatar-logo-letter {
-    font-size: clamp(1.6rem, 7.2vw, 2.2rem);
+    font-size: clamp(1.95rem, 8.8vw, 2.75rem);
   }
 }
