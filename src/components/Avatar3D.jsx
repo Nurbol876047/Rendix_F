@@ -46,23 +46,6 @@ const Avatar3D = () => {
     lastTime: 0,
   });
 
-  const renderLogoWord = (faceClass) => (
-    <div className={`avatar-logo-word ${faceClass}`} aria-hidden="true">
-      {brandLetters.map((letter, index) => (
-        <span
-          key={`${faceClass}-${index}`}
-          className={`avatar-logo-letter${index === 1 || index === 2 ? ' is-hot' : ''}`}
-          style={{
-            '--letter-delay': `${index * 0.18}s`,
-            '--letter-shift': `${(index % 2 === 0 ? -1 : 1) * (3 + (index % 3))}px`,
-          }}
-        >
-          {letter}
-        </span>
-      ))}
-    </div>
-  );
-
   useEffect(() => {
     const stage = stageRef.current;
 
@@ -71,9 +54,15 @@ const Avatar3D = () => {
     }
 
     const applyTransforms = (idleRotateX = 0, idleRotateY = 0) => {
-      stage.style.setProperty('--avatar-rotate-x', `${currentRef.current.rotateX + idleRotateX}deg`);
-      stage.style.setProperty('--avatar-rotate-y', `${currentRef.current.rotateY + idleRotateY}deg`);
+      const renderedRotateX = currentRef.current.rotateX + idleRotateX;
+      const renderedRotateY = currentRef.current.rotateY + idleRotateY;
+      const normalizedRotateY = ((renderedRotateY % 360) + 360) % 360;
+      const wordFlip = normalizedRotateY > 90 && normalizedRotateY < 270 ? -1 : 1;
+
+      stage.style.setProperty('--avatar-rotate-x', `${renderedRotateX}deg`);
+      stage.style.setProperty('--avatar-rotate-y', `${renderedRotateY}deg`);
       stage.style.setProperty('--avatar-float-y', `${currentRef.current.floatY ?? 0}px`);
+      stage.style.setProperty('--avatar-word-flip', wordFlip);
     };
 
     const animate = (timestamp) => {
@@ -83,17 +72,17 @@ const Avatar3D = () => {
 
       const elapsed = (timestamp - idleStartRef.current) / 1000;
       const idleRotateX = dragRef.current.active ? 0 : Math.sin(elapsed * 0.92) * 1.2;
-      const idleRotateY = dragRef.current.active ? 0 : Math.cos(elapsed * 0.74) * 0.8;
+      const idleRotateY = dragRef.current.active ? 0 : Math.cos(elapsed * 0.74) * 0.35;
 
       if (!dragRef.current.active) {
         targetRef.current.rotateX += velocityRef.current.rotateX;
         targetRef.current.rotateY += velocityRef.current.rotateY;
-        velocityRef.current.rotateX *= 0.94;
-        velocityRef.current.rotateY *= 0.94;
+        velocityRef.current.rotateX *= 0.92;
+        velocityRef.current.rotateY *= 0.92;
 
-        const snappedY = Math.round(targetRef.current.rotateY / 360) * 360;
-        targetRef.current.rotateY += (snappedY - targetRef.current.rotateY) * 0.035;
-        targetRef.current.rotateX += (-8 - targetRef.current.rotateX) * 0.05;
+        const snappedY = Math.round(targetRef.current.rotateY / 180) * 180;
+        targetRef.current.rotateY += (snappedY - targetRef.current.rotateY) * 0.08;
+        targetRef.current.rotateX += (-8 - targetRef.current.rotateX) * 0.06;
 
         if (Math.abs(velocityRef.current.rotateX) < 0.002) {
           velocityRef.current.rotateX = 0;
@@ -152,8 +141,8 @@ const Avatar3D = () => {
 
     const deltaX = event.clientX - dragRef.current.startX;
     const deltaY = event.clientY - dragRef.current.startY;
-    const rotateY = dragRef.current.baseRotateY + deltaX * 0.58;
-    const rotateX = Math.max(-40, Math.min(26, dragRef.current.baseRotateX - deltaY * 0.28));
+    const rotateY = dragRef.current.baseRotateY + deltaX * 0.65;
+    const rotateX = Math.max(-18, Math.min(10, dragRef.current.baseRotateX - deltaY * 0.18));
     const now = performance.now();
     const elapsed = Math.max(16, now - dragRef.current.lastTime);
     const frameStep = elapsed / 16.67;
@@ -211,9 +200,19 @@ const Avatar3D = () => {
               ))}
             </div>
 
-            <div className="avatar-logo-rotor">
-              {renderLogoWord('avatar-logo-word-front')}
-              {renderLogoWord('avatar-logo-word-back')}
+            <div className="avatar-logo-word" aria-hidden="true">
+              {brandLetters.map((letter, index) => (
+                <span
+                  key={index}
+                  className={`avatar-logo-letter${index === 1 || index === 2 ? ' is-hot' : ''}`}
+                  style={{
+                    '--letter-delay': `${index * 0.18}s`,
+                    '--letter-shift': `${(index % 2 === 0 ? -1 : 1) * (3 + (index % 3))}px`,
+                  }}
+                >
+                  {letter}
+                </span>
+              ))}
             </div>
           </div>
         </div>
