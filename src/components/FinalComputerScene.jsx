@@ -4,7 +4,6 @@ import { Canvas } from '@react-three/fiber';
 import {
   Center,
   ContactShadows,
-  Environment,
   OrbitControls,
   useGLTF,
 } from '@react-three/drei';
@@ -71,7 +70,12 @@ const createMonitorTexture = () => {
   context.fillRect(116, 114, 156, 10);
   context.fillRect(canvas.width - 272, canvas.height - 124, 156, 10);
 
-  return new THREE.CanvasTexture(canvas);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.flipY = false;
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.needsUpdate = true;
+
+  return texture;
 };
 
 const ComputerModel = () => {
@@ -83,10 +87,6 @@ const ComputerModel = () => {
     if (!screenTexture) {
       return undefined;
     }
-
-    screenTexture.flipY = false;
-    screenTexture.colorSpace = THREE.SRGBColorSpace;
-    screenTexture.needsUpdate = true;
 
     model.traverse((child) => {
       if (!child.isMesh) {
@@ -131,21 +131,20 @@ const FinalComputerScene = () => {
             dpr={[1, 1.75]}
             camera={{ position: [0, 0.9, 8.2], fov: 30 }}
           >
-            <ambientLight intensity={0.7} />
+            <ambientLight intensity={1} />
+            <hemisphereLight intensity={0.5} color="#ffffff" groundColor="#e63946" />
             <directionalLight
               castShadow
               position={[6, 7, 5]}
-              intensity={2.2}
+              intensity={3}
               color="#ff6a6a"
               shadow-mapSize-width={1024}
               shadow-mapSize-height={1024}
             />
-            <pointLight position={[-4, 2, -4]} intensity={0.9} color="#ffffff" />
-            <pointLight position={[0, 1.4, 4]} intensity={1.1} color="#e63946" />
+            <pointLight position={[-4, 2, -4]} intensity={2} color="#ffffff" />
+            <pointLight position={[0, 1.4, 4]} intensity={2.5} color="#e63946" />
 
             <Suspense fallback={null}>
-              <Environment preset="night" />
-
               <Center>
                 <group scale={2.15} position={[0, -3.05, 0]} rotation={[0, -0.12, 0]}>
                   <ComputerModel />

@@ -1,0 +1,40 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" rx="48" fill="url(#bg)"/>
+  <circle cx="220" cy="164" r="140" fill="#8ECBFF" fill-opacity="0.28"/>
+  <circle cx="1380" cy="184" r="120" fill="#FFC857" fill-opacity="0.26"/>
+  <circle cx="1328" cy="724" r="168" fill="#63C7B2" fill-opacity="0.2"/>
+  <rect x="80" y="76" width="920" height="246" rx="40" fill="white" fill-opacity="0.82"/>
+  <rect x="1034" y="76" width="486" height="246" rx="40" fill="white" fill-opacity="0.74"/>
+  <rect x="80" y="356" width="1440" height="464" rx="44" fill="white" fill-opacity="0.8"/>
+  <text x="136" y="144" fill="#56718B" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="32" font-weight="700" letter-spacing="6">INTERACTIVE ENGLISH</text>
+  <text x="136" y="232" fill="#18324A" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="84" font-weight="900">English For Everyone</text>
+  <text x="136" y="286" fill="#56718B" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="34" font-weight="600">Voice, gesture, quiz, and 3D learning experience</text>
+  <rect x="1092" y="126" width="370" height="64" rx="32" fill="#FF7B54"/>
+  <text x="1142" y="168" fill="white" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="30" font-weight="800">5 FEATURES</text>
+  <rect x="1100" y="212" width="154" height="74" rx="26" fill="#D9EBFF"/>
+  <rect x="1270" y="212" width="154" height="74" rx="26" fill="#B9F0D6"/>
+  <text x="1134" y="258" fill="#18324A" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="28" font-weight="800">VOICE</text>
+  <text x="1299" y="258" fill="#18324A" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="28" font-weight="800">3D</text>
+  <rect x="132" y="412" width="418" height="154" rx="34" fill="#EAF4FF"/>
+  <rect x="592" y="412" width="418" height="154" rx="34" fill="#FFF2D6"/>
+  <rect x="1052" y="412" width="418" height="154" rx="34" fill="#E7FBF5"/>
+  <rect x="132" y="602" width="418" height="154" rx="34" fill="#FFF1EC"/>
+  <rect x="592" y="602" width="878" height="154" rx="34" fill="#EDF5FF"/>
+  <text x="172" y="464" fill="#18324A" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="24" font-weight="800">1. Sentence Builder</text>
+  <text x="172" y="508" fill="#56718B" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="28" font-weight="600">Build English sentences by hand gestures</text>
+  <text x="632" y="464" fill="#18324A" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="24" font-weight="800">2. Speak and Describe</text>
+  <text x="632" y="508" fill="#56718B" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="28" font-weight="600">Describe the image by voice with flexible checking</text>
+  <text x="1092" y="464" fill="#18324A" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="24" font-weight="800">3. Voice Game</text>
+  <text x="1092" y="508" fill="#56718B" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="28" font-weight="600">Control the runner with voice commands</text>
+  <text x="172" y="654" fill="#18324A" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="24" font-weight="800">4. Finger Quiz</text>
+  <text x="172" y="698" fill="#56718B" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="28" font-weight="600">Choose test answers with one, two, or three fingers</text>
+  <text x="632" y="654" fill="#18324A" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="24" font-weight="800">5. 3D Animation</text>
+  <text x="632" y="698" fill="#56718B" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="28" font-weight="600">Animated 3D logo stage keeps the learning flow playful</text>
+  <defs>
+    <linearGradient id="bg" x1="220" y1="72" x2="1340" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F1F8FF"/>
+      <stop offset="0.5" stop-color="#FFF6DD"/>
+      <stop offset="1" stop-color="#F6FFF9"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,32 +1,36 @@
 .skills {
-  background-color: var(--color-bg);
+  background:
+    linear-gradient(180deg, rgba(5, 5, 5, 1), rgba(3, 3, 3, 1)),
+    var(--color-bg);
+}
+
+.services-intro {
+  max-width: 760px;
+  margin-bottom: 2.5rem;
 }
 
 .skills-layout {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.75rem;
-}
-
-@media (min-width: 768px) {
-  .skills-layout {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.2rem;
 }
 
 .skill-group {
-  padding: 2.2rem 2rem;
-  border-top: 1px solid transparent;
-  min-height: 132px;
+  min-height: 100%;
+  padding: 1.7rem;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  border-top: 1px solid transparent;
+  background:
+    linear-gradient(180deg, rgba(15, 15, 15, 0.95), rgba(7, 7, 7, 0.98)),
+    radial-gradient(circle at top right, rgba(230, 57, 70, 0.08), transparent 46%);
 }
 
 .group-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 0;
+  gap: 0.9rem;
+  margin-bottom: 1rem;
 }
 
 .group-icon {
@@ -35,50 +39,63 @@
 
 .group-title {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
+  font-size: 1.08rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
+}
+
+.group-description {
+  margin-bottom: 1.2rem;
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.7;
+}
+
+.group-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.group-item {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.55rem 0.85rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .skills-spotlight {
-  margin-top: 3.5rem;
-  padding-top: 1.6rem;
+  margin-top: 3rem;
+  padding-top: 1.8rem;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .skills-spotlight-label {
-  margin-bottom: 1.45rem;
+  margin-bottom: 1.35rem;
   font-family: var(--font-heading);
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.38);
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .skills-spotlight-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.55rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
 }
 
 .skills-spotlight-card {
-  position: relative;
-  overflow: hidden;
-  min-height: 252px;
-  padding: 2.05rem 1.85rem 1.9rem;
-  border-radius: 1rem;
-  border: 1px solid rgba(230, 57, 70, 0.45);
+  min-height: 240px;
+  padding: 1.8rem 1.5rem;
+  border: 1px solid rgba(230, 57, 70, 0.36);
   background:
     radial-gradient(circle at top right, rgba(230, 57, 70, 0.08), transparent 34%),
     linear-gradient(180deg, rgba(24, 9, 11, 0.96), rgba(9, 7, 8, 0.98));
-  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24);
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.skills-spotlight-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(230, 57, 70, 0.78);
-  box-shadow: 0 22px 44px rgba(230, 57, 70, 0.08);
 }
 
 .skills-spotlight-head {
@@ -86,7 +103,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 1.35rem;
+  margin-bottom: 1.25rem;
 }
 
 .skills-spotlight-title {
@@ -100,12 +117,11 @@
   align-items: center;
   justify-content: center;
   color: var(--color-accent);
-  flex-shrink: 0;
 }
 
 .skills-spotlight-title h3 {
   font-family: var(--font-heading);
-  font-size: 1.46rem;
+  font-size: 1.18rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--color-text);
@@ -116,7 +132,6 @@
   align-items: center;
   justify-content: center;
   padding: 0.28rem 0.78rem;
-  border-radius: 0.45rem;
   border: 1px solid rgba(230, 57, 70, 0.28);
   background: rgba(230, 57, 70, 0.12);
   color: var(--color-accent);
@@ -129,54 +144,41 @@
 
 .skills-spotlight-list {
   display: grid;
-  gap: 0.95rem;
+  gap: 0.9rem;
 }
 
 .skills-spotlight-item {
   position: relative;
-  padding-left: 1.05rem;
-  font-size: 1.08rem;
-  color: rgba(255, 255, 255, 0.66);
-  line-height: 1.5;
+  padding-left: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
 }
 
 .skills-spotlight-item::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 0.1rem;
+  top: 0.15rem;
   width: 1px;
-  height: 1.1rem;
+  height: 1rem;
   background: rgba(230, 57, 70, 0.72);
 }
 
-@media (min-width: 768px) {
+@media (max-width: 960px) {
+  .skills-layout,
   .skills-spotlight-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 768px) {
-  .skill-group {
-    padding: 1.5rem;
-    min-height: 108px;
-  }
-
-  .skills-spotlight {
-    margin-top: 2.5rem;
-  }
-
+@media (max-width: 640px) {
+  .skill-group,
   .skills-spotlight-card {
-    min-height: auto;
-    padding: 1.55rem 1.25rem 1.45rem;
+    padding: 1.4rem 1.2rem;
   }
 
   .skills-spotlight-head {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .skills-spotlight-title h3 {
-    font-size: 1.22rem;
   }
 }

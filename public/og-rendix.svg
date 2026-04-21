@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B0B0B"/>
+      <stop offset="1" stop-color="#030303"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(922 172) rotate(137.5) scale(410.811 475.178)">
+      <stop stop-color="#E63946" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#E63946" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="line" x1="183" y1="472" x2="525" y2="472" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E63946"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#panel)"/>
+  <rect x="50" y="50" width="1100" height="530" rx="28" stroke="rgba(255,255,255,0.08)"/>
+  <circle cx="930" cy="170" r="230" fill="url(#glow)"/>
+  <path d="M170 96H1030" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+  <path d="M170 534H1030" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+  <path d="M170 96V534" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+  <path d="M1030 96V534" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+
+  <rect x="184" y="165" width="160" height="160" rx="36" fill="#050505" stroke="rgba(255,255,255,0.08)"/>
+  <path d="M223 290V200h48.5c22 0 37 12.4 37 33.5 0 13.2-7.2 22.6-18.4 27L313 290h-25.1l-20.8-24.4H246V290h-23Zm23-44.4h20.8c10.6 0 17.1-4.7 17.1-13.2s-6.5-13.4-17.1-13.4H246v26.6Z" fill="#ffffff"/>
+  <path d="M300 190L224 298" stroke="#E63946" stroke-width="8" stroke-linecap="round"/>
+
+  <text x="184" y="382" fill="#E63946" font-family="Space Grotesk, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="7">DIGITAL STUDIO</text>
+  <text x="184" y="448" fill="#FFFFFF" font-family="Space Grotesk, Arial, sans-serif" font-size="84" font-weight="700" letter-spacing="14">RENDIX</text>
+  <text x="184" y="505" fill="rgba(255,255,255,0.72)" font-family="Outfit, Arial, sans-serif" font-size="28">
+    Commercial websites, automation, cybersecurity, and launch-ready digital systems.
+  </text>
+  <path d="M184 472H525" stroke="url(#line)" stroke-width="4"/>
+
+  <g opacity="0.85">
+    <path d="M798 365H969" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+    <path d="M798 405H1018" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+    <path d="M798 445H959" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+    <text x="798" y="338" fill="#E63946" font-family="Space Grotesk, Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="5">STUDIO STACK</text>
+    <text x="798" y="361" fill="#FFFFFF" font-family="Outfit, Arial, sans-serif" font-size="24">Websites / Automation / Security / Internal Systems</text>
+  </g>
+</svg>

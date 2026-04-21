@@ -1,0 +1,56 @@
+.why-us {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(230, 57, 70, 0.1), transparent 34%),
+    var(--color-bg);
+}
+
+.why-us-intro {
+  max-width: 780px;
+  margin-bottom: 2.5rem;
+}
+
+.why-us-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.4rem;
+}
+
+.why-us-card {
+  padding: 2rem 1.8rem;
+  min-height: 240px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(14, 14, 14, 0.94), rgba(6, 6, 6, 0.98)),
+    radial-gradient(circle at top, rgba(230, 57, 70, 0.12), transparent 48%);
+}
+
+.why-us-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.2rem;
+  color: var(--color-accent);
+}
+
+.why-us-card h3 {
+  margin-bottom: 0.9rem;
+  font-family: var(--font-heading);
+  font-size: 1.18rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.why-us-card p {
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .why-us-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .why-us-card {
+    min-height: 0;
+  }
+}

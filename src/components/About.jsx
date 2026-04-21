@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
 import { BookOpen, Shield } from 'lucide-react';
 import './About.css';
@@ -17,7 +17,7 @@ const About = () => {
             glareEnable={true} 
             glareMaxOpacity={0.1}
           >
-            <motion.div
+            <Motion.div
               className="about-block glass-panel interactive-card"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -31,7 +31,7 @@ const About = () => {
               <p className="block-body">
                 {t('about.missionText')}
               </p>
-            </motion.div>
+            </Motion.div>
           </Tilt>
 
           <Tilt 
@@ -40,7 +40,7 @@ const About = () => {
             glareEnable={true} 
             glareMaxOpacity={0.1}
           >
-            <motion.div
+            <Motion.div
               className="about-block glass-panel interactive-card"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -64,7 +64,7 @@ const About = () => {
                   <span className="stat-num">99.9%</span>
                 </div>
               </div>
-            </motion.div>
+            </Motion.div>
           </Tilt>
         </div>
       </div>

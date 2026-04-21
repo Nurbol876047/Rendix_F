@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 
 const iconVariants = {
   hidden: { opacity: 0, scale: 0.8 },
@@ -20,16 +20,16 @@ const getLetterVariants = (index) => ({
 const AnimatedSectionTitle = ({ title, icon = null }) => {
   return (
     <div className="section-title-container">
-      <motion.h2
+      <Motion.h2
         className="section-title"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: '-100px' }}
       >
         {icon ? (
-          <motion.span className="section-title-icon-wrap" variants={iconVariants}>
+          <Motion.span className="section-title-icon-wrap" variants={iconVariants}>
             {icon}
-          </motion.span>
+          </Motion.span>
         ) : null}
 
         {title.split('').map((char, index) => {
@@ -38,7 +38,7 @@ const AnimatedSectionTitle = ({ title, icon = null }) => {
           }
 
           return (
-            <motion.span
+            <Motion.span
               key={`${char}-${index}`}
               className="section-letter"
               variants={getLetterVariants(index)}
@@ -47,10 +47,10 @@ const AnimatedSectionTitle = ({ title, icon = null }) => {
                 <span className="section-letter-face section-letter-front">{char}</span>
                 <span className="section-letter-face section-letter-back" aria-hidden="true">{char}</span>
               </span>
-            </motion.span>
+            </Motion.span>
           );
         })}
-      </motion.h2>
+      </Motion.h2>
     </div>
   );
 };

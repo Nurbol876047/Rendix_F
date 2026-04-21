@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import './Navbar.css';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -8,39 +8,56 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 80);
+      setScrolled(window.scrollY > 32);
     };
+
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const navLinks = useMemo(() => ([
+    { href: '#services', label: t('nav.services') },
+    { href: '#why-us', label: t('nav.whyUs') },
+    { href: '#process', label: t('nav.process') },
+    { href: '#projects', label: t('nav.work') },
+    { href: '#contact', label: t('nav.contact') },
+  ]), [t]);
 
   return (
     <nav className={`navbar ${scrolled ? 'nav-scrolled' : ''}`}>
       <div className="container nav-container">
-        <a href="#home" className="nav-brand">
+        <a href="#home" className="nav-brand" aria-label="RENDIX">
           <span className="brand-main">RENDIX</span>
           <span className="brand-sub">studio</span>
         </a>
+
         <div className="nav-menu">
-          <a href="#skills" className="nav-item">{t('skills.title')}</a>
-          <a href="#projects" className="nav-item">{t('nav.work')}</a>
-          <a href="#contact" className="nav-item">{t('nav.contact')}</a>
-          
-          <div className="language-switcher">
-            <button 
-              className={`lang-btn ${language === 'kz' ? 'active' : ''}`} 
+          {navLinks.map((link) => (
+            <a key={link.href} href={link.href} className="nav-item">
+              {link.label}
+            </a>
+          ))}
+
+          <div className="language-switcher" aria-label="Language switcher">
+            <button
+              type="button"
+              className={`lang-btn ${language === 'kz' ? 'active' : ''}`}
               onClick={() => setLanguage('kz')}
             >
               KZ
             </button>
-            <button 
-              className={`lang-btn ${language === 'ru' ? 'active' : ''}`} 
+            <button
+              type="button"
+              className={`lang-btn ${language === 'ru' ? 'active' : ''}`}
               onClick={() => setLanguage('ru')}
             >
               RU
             </button>
-            <button 
-              className={`lang-btn ${language === 'en' ? 'active' : ''}`} 
+            <button
+              type="button"
+              className={`lang-btn ${language === 'en' ? 'active' : ''}`}
               onClick={() => setLanguage('en')}
             >
               EN
