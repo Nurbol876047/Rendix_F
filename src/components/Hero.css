@@ -205,7 +205,6 @@
   width: min(100%, 760px);
   height: min(100%, 560px);
   min-height: 420px;
-  filter: saturate(1.08) contrast(1.04);
 }
 
 .avatar-webgl-host canvas {

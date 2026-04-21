@@ -2,27 +2,26 @@ import { Suspense, useMemo, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Center, Text3D } from '@react-three/drei';
 import fontUrl from 'three/examples/fonts/helvetiker_bold.typeface.json?url';
-import CanvasResizeSync, { useElementSize } from './CanvasResizeSync';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const HOT_LETTER_INDICES = new Set([1, 2]);
 
 const buildParticles = () =>
-  Array.from({ length: 24 }, (_, index) => {
-    const angle = (index / 24) * Math.PI * 2;
-    const radiusX = 2.9 + (index % 4) * 0.24;
-    const radiusY = 1.1 + (index % 5) * 0.14;
+  Array.from({ length: 28 }, (_, index) => {
+    const angle = (index / 28) * Math.PI * 2;
+    const radiusX = 3 + (index % 4) * 0.22;
+    const radiusY = 1.16 + (index % 5) * 0.12;
 
     return {
       baseX: Math.cos(angle) * radiusX,
       baseY: Math.sin(angle) * radiusY,
-      baseZ: ((index % 5) - 2) * 0.18,
+      baseZ: ((index % 7) - 3) * 0.16,
       drift: 0.08 + (index % 3) * 0.03,
-      pulse: 0.75 + (index % 4) * 0.12,
-      size: 0.03 + (index % 4) * 0.008,
-      speed: 0.45 + (index % 5) * 0.08,
-      phase: index * 0.47,
-      color: index % 3 === 0 ? '#ffc487' : '#ff4f63',
+      pulse: 0.85 + (index % 4) * 0.1,
+      size: 0.028 + (index % 4) * 0.008,
+      speed: 0.42 + (index % 5) * 0.06,
+      phase: index * 0.41,
+      color: index % 4 === 0 ? '#ffd2a0' : '#ff4961',
       geometry: index % 2 === 0 ? 'octa' : 'tetra',
     };
   });
@@ -41,16 +40,17 @@ const LogoParticles = () => {
         return;
       }
 
-      mesh.position.x = particle.baseX + Math.cos(elapsed * particle.speed + particle.phase) * particle.drift;
+      mesh.position.x =
+        particle.baseX + Math.cos(elapsed * particle.speed + particle.phase) * particle.drift;
       mesh.position.y =
-        particle.baseY + Math.sin(elapsed * (particle.speed + 0.22) + particle.phase) * particle.drift;
+        particle.baseY + Math.sin(elapsed * (particle.speed + 0.18) + particle.phase) * particle.drift;
       mesh.position.z =
-        particle.baseZ + Math.sin(elapsed * (particle.speed + 0.38) + particle.phase) * 0.12;
+        particle.baseZ + Math.sin(elapsed * (particle.speed + 0.32) + particle.phase) * 0.14;
 
-      mesh.rotation.x += 0.012 + index * 0.0007;
-      mesh.rotation.y += 0.016 + index * 0.0008;
+      mesh.rotation.x += 0.01 + index * 0.0005;
+      mesh.rotation.y += 0.012 + index * 0.0006;
 
-      const scale = 0.82 + Math.sin(elapsed * particle.pulse + particle.phase) * 0.28;
+      const scale = 0.82 + Math.sin(elapsed * particle.pulse + particle.phase) * 0.34;
       mesh.scale.setScalar(scale);
     });
   });
@@ -73,9 +73,9 @@ const LogoParticles = () => {
           <meshStandardMaterial
             color={particle.color}
             emissive={particle.color}
-            emissiveIntensity={2.2}
-            metalness={0.18}
-            roughness={0.26}
+            emissiveIntensity={2.4}
+            metalness={0.2}
+            roughness={0.22}
             toneMapped={false}
           />
         </mesh>
@@ -84,63 +84,91 @@ const LogoParticles = () => {
   );
 };
 
-const RendixLetters = ({ brand }) => {
-  const letters = useMemo(() => Array.from(brand.replace(/\s+/g, '')), [brand]);
-  const spacing = 1.03;
-  const offset = ((letters.length - 1) * spacing) / 2;
+const FloatingLetter = ({ letter, index, total }) => {
+  const letterRef = useRef(null);
+  const isHot = HOT_LETTER_INDICES.has(index);
+  const spacing = 1.07;
+  const offset = ((total - 1) * spacing) / 2;
+  const baseX = index * spacing - offset;
+  const baseY = Math.sin(index * 0.8) * 0.035;
+  const baseZ = Math.cos(index * 0.9) * 0.14;
+
+  useFrame(({ clock }) => {
+    const elapsed = clock.getElapsedTime();
+
+    if (!letterRef.current) {
+      return;
+    }
+
+    letterRef.current.position.x = baseX;
+    letterRef.current.position.y = baseY + Math.sin(elapsed * 1.1 + index * 0.55) * 0.025;
+    letterRef.current.position.z = baseZ + Math.cos(elapsed * 0.92 + index * 0.6) * 0.06;
+    letterRef.current.rotation.x = Math.sin(elapsed * 0.7 + index * 0.35) * 0.035;
+    letterRef.current.rotation.y = Math.cos(elapsed * 0.82 + index * 0.4) * 0.09;
+    letterRef.current.rotation.z = Math.sin(elapsed * 0.5 + index * 0.3) * 0.018;
+  });
 
   return (
-    <group scale={[1.18, 1.18, 1.18]}>
-      {letters.map((letter, index) => {
-        const isHot = HOT_LETTER_INDICES.has(index);
+    <group ref={letterRef}>
+      <Center>
+        <Text3D
+          font={fontUrl}
+          size={0.8}
+          height={0.42}
+          curveSegments={20}
+          bevelEnabled
+          bevelThickness={0.03}
+          bevelSize={0.028}
+          bevelOffset={0}
+          bevelSegments={8}
+        >
+          {letter}
+          <meshPhysicalMaterial
+            attach="material-0"
+            color={isHot ? '#ffd8ab' : '#ff6270'}
+            emissive={isHot ? '#ff9563' : '#ff304a'}
+            emissiveIntensity={isHot ? 1.95 : 1.28}
+            metalness={0.28}
+            roughness={0.12}
+            clearcoat={1}
+            clearcoatRoughness={0.1}
+            toneMapped={false}
+          />
+          <meshStandardMaterial
+            attach="material-1"
+            color={isHot ? '#933f2c' : '#6d1220'}
+            emissive={isHot ? '#ff6f4a' : '#c91c37'}
+            emissiveIntensity={0.42}
+            metalness={0.58}
+            roughness={0.3}
+            toneMapped={false}
+          />
+        </Text3D>
+      </Center>
+    </group>
+  );
+};
 
-        return (
-          <group key={`${letter}-${index}`} position={[index * spacing - offset, 0, 0]}>
-            <Center>
-              <Text3D
-                font={fontUrl}
-                size={0.78}
-                height={0.28}
-                curveSegments={18}
-                bevelEnabled
-                bevelThickness={0.022}
-                bevelSize={0.02}
-                bevelOffset={0}
-                bevelSegments={7}
-              >
-                {letter}
-                <meshPhysicalMaterial
-                  attach="material-0"
-                  color={isHot ? '#ffd3a0' : '#ff5b69'}
-                  emissive={isHot ? '#ff9561' : '#ff3049'}
-                  emissiveIntensity={isHot ? 1.7 : 1.15}
-                  metalness={0.24}
-                  roughness={0.15}
-                  clearcoat={1}
-                  clearcoatRoughness={0.12}
-                  toneMapped={false}
-                />
-                <meshStandardMaterial
-                  attach="material-1"
-                  color={isHot ? '#a63d29' : '#5e0e1d'}
-                  emissive={isHot ? '#ff7448' : '#be1b31'}
-                  emissiveIntensity={isHot ? 0.48 : 0.34}
-                  metalness={0.46}
-                  roughness={0.34}
-                  toneMapped={false}
-                />
-              </Text3D>
-            </Center>
-          </group>
-        );
-      })}
+const RendixLetters = ({ brand }) => {
+  const letters = useMemo(() => Array.from(brand.replace(/\s+/g, '')), [brand]);
+
+  return (
+    <group scale={[1.12, 1.12, 1.12]}>
+      {letters.map((letter, index) => (
+        <FloatingLetter
+          key={`${letter}-${index}`}
+          letter={letter}
+          index={index}
+          total={letters.length}
+        />
+      ))}
     </group>
   );
 };
 
 const LogoScene = ({ brand, dragRef, targetRotationRef, velocityRef }) => {
   const logoGroupRef = useRef(null);
-  const currentRotationRef = useRef({ x: -0.08, y: 0 });
+  const currentRotationRef = useRef({ x: -0.1, y: 0 });
 
   useFrame(({ clock }) => {
     const elapsed = clock.getElapsedTime();
@@ -151,14 +179,14 @@ const LogoScene = ({ brand, dragRef, targetRotationRef, velocityRef }) => {
       velocityRef.current.x *= 0.92;
       velocityRef.current.y *= 0.92;
 
-      targetRotationRef.current.x += (-0.08 - targetRotationRef.current.x) * 0.06;
-      targetRotationRef.current.y += (0 - targetRotationRef.current.y) * 0.045;
+      targetRotationRef.current.x += (-0.1 - targetRotationRef.current.x) * 0.06;
+      targetRotationRef.current.y += (0 - targetRotationRef.current.y) * 0.035;
 
-      if (Math.abs(velocityRef.current.x) < 0.0004) {
+      if (Math.abs(velocityRef.current.x) < 0.00035) {
         velocityRef.current.x = 0;
       }
 
-      if (Math.abs(velocityRef.current.y) < 0.0004) {
+      if (Math.abs(velocityRef.current.y) < 0.00035) {
         velocityRef.current.y = 0;
       }
     }
@@ -172,20 +200,20 @@ const LogoScene = ({ brand, dragRef, targetRotationRef, velocityRef }) => {
       return;
     }
 
-    logoGroupRef.current.rotation.x = currentRotationRef.current.x + Math.sin(elapsed * 0.9) * 0.025;
-    logoGroupRef.current.rotation.y = currentRotationRef.current.y + Math.cos(elapsed * 0.65) * 0.04;
-    logoGroupRef.current.position.y = Math.sin(elapsed * 1.1) * 0.08;
-    logoGroupRef.current.position.z = Math.cos(elapsed * 0.85) * 0.04;
+    logoGroupRef.current.rotation.x = currentRotationRef.current.x + Math.sin(elapsed * 0.78) * 0.02;
+    logoGroupRef.current.rotation.y = currentRotationRef.current.y + Math.cos(elapsed * 0.58) * 0.03;
+    logoGroupRef.current.position.y = Math.sin(elapsed * 1.02) * 0.06;
+    logoGroupRef.current.position.z = Math.cos(elapsed * 0.82) * 0.03;
   });
 
   return (
     <>
-      <ambientLight intensity={0.42} />
-      <hemisphereLight intensity={0.95} color="#fff0ec" groundColor="#140204" />
-      <directionalLight position={[4.8, 5.4, 4.8]} intensity={2.8} color="#ffd8c8" />
-      <pointLight position={[0, 0.4, 4.4]} intensity={32} distance={13} color="#ff9f71" decay={2} />
-      <pointLight position={[0, -0.4, 3.2]} intensity={18} distance={10} color="#ff2e49" decay={2} />
-      <pointLight position={[-2.6, 1.6, 2.2]} intensity={6} distance={8} color="#ffffff" decay={2} />
+      <ambientLight intensity={0.34} />
+      <hemisphereLight intensity={0.78} color="#fff1ec" groundColor="#170204" />
+      <directionalLight position={[4.6, 5.6, 5.4]} intensity={2.7} color="#ffe2d4" />
+      <pointLight position={[0, 0.35, 4.8]} intensity={28} distance={14} color="#ffab78" decay={2} />
+      <pointLight position={[0, -0.25, 3.6]} intensity={18} distance={11} color="#ff2745" decay={2} />
+      <pointLight position={[-2.8, 1.4, 2.4]} intensity={6} distance={8} color="#ffffff" decay={2} />
 
       <group ref={logoGroupRef}>
         <RendixLetters brand={brand} />
@@ -198,16 +226,15 @@ const LogoScene = ({ brand, dragRef, targetRotationRef, velocityRef }) => {
 const Avatar3D = () => {
   const { t } = useLanguage();
   const brand = (t('hero.brand') || 'RENDIX').replace(/\s+/g, '');
-  const [canvasHostRef, canvasSize] = useElementSize();
   const shellRef = useRef(null);
-  const targetRotationRef = useRef({ x: -0.08, y: 0 });
+  const targetRotationRef = useRef({ x: -0.1, y: 0 });
   const velocityRef = useRef({ x: 0, y: 0 });
   const dragRef = useRef({
     active: false,
     pointerId: null,
     startX: 0,
     startY: 0,
-    baseRotateX: -0.08,
+    baseRotateX: -0.1,
     baseRotateY: 0,
     lastX: 0,
     lastY: 0,
@@ -246,16 +273,16 @@ const Avatar3D = () => {
 
     const deltaX = event.clientX - dragRef.current.startX;
     const deltaY = event.clientY - dragRef.current.startY;
-    const rotateY = dragRef.current.baseRotateY + deltaX * 0.011;
-    const rotateX = Math.max(-0.34, Math.min(0.16, dragRef.current.baseRotateX - deltaY * 0.0045));
+    const rotateY = dragRef.current.baseRotateY + deltaX * 0.0105;
+    const rotateX = Math.max(-0.3, Math.min(0.12, dragRef.current.baseRotateX - deltaY * 0.0038));
     const now = performance.now();
     const elapsed = Math.max(16, now - dragRef.current.lastTime);
     const frameStep = elapsed / 16.67;
 
     targetRotationRef.current.y = rotateY;
     targetRotationRef.current.x = rotateX;
-    velocityRef.current.y = (((event.clientX - dragRef.current.lastX) * 0.011) / frameStep) * 0.16;
-    velocityRef.current.x = (((dragRef.current.lastY - event.clientY) * 0.0045) / frameStep) * 0.16;
+    velocityRef.current.y = (((event.clientX - dragRef.current.lastX) * 0.0105) / frameStep) * 0.16;
+    velocityRef.current.x = (((dragRef.current.lastY - event.clientY) * 0.0038) / frameStep) * 0.16;
 
     dragRef.current.lastX = event.clientX;
     dragRef.current.lastY = event.clientY;
@@ -289,13 +316,20 @@ const Avatar3D = () => {
         onPointerCancel={handlePointerEnd}
         onPointerLeave={handlePointerEnd}
       >
-        <div ref={canvasHostRef} className="avatar-webgl-host">
+        <div className="avatar-webgl-host">
           <Canvas
-            dpr={[1.25, 2.2]}
-            camera={{ position: [0, 0, 8.1], fov: 30 }}
-            gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}
+            dpr={[1.4, 2.6]}
+            camera={{ position: [0, 0, 8], fov: 30 }}
+            gl={{
+              alpha: true,
+              antialias: true,
+              powerPreference: 'high-performance',
+              premultipliedAlpha: false,
+            }}
+            onCreated={({ gl }) => {
+              gl.setClearColor(0x000000, 0);
+            }}
           >
-            <CanvasResizeSync width={canvasSize.width} height={canvasSize.height} />
             <Suspense fallback={null}>
               <LogoScene
                 brand={brand}
