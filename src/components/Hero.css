@@ -337,28 +337,33 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transform-style: preserve-3d;
+  text-rendering: geometricPrecision;
 }
 
 .avatar-logo-word-front {
-  transform: translateZ(54px);
+  transform: translateZ(18px);
 }
 
 .avatar-logo-word-back {
-  transform: rotateY(180deg) translateZ(54px);
+  transform: rotateY(180deg) translateZ(18px);
+  opacity: 0.9;
+  filter: saturate(0.9) brightness(0.92);
 }
 
 .avatar-logo-letter {
   display: inline-block;
   font-family: var(--font-heading);
-  font-size: clamp(2.45rem, 5.8vw, 4.6rem);
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  font-size: clamp(2.6rem, 6vw, 4.9rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
   line-height: 1;
   text-transform: uppercase;
   color: #e63946;
+  -webkit-text-stroke: 0.35px rgba(255, 173, 173, 0.16);
   text-shadow:
-    0 0 14px rgba(230, 57, 70, 0.42),
-    0 0 40px rgba(230, 57, 70, 0.24);
+    0 0 12px rgba(230, 57, 70, 0.36),
+    0 0 24px rgba(230, 57, 70, 0.22),
+    0 0 40px rgba(230, 57, 70, 0.12);
   animation: avatarLetterFloat 4.8s ease-in-out infinite;
   animation-delay: var(--letter-delay, 0s);
 }
@@ -653,6 +658,6 @@
   }
 
   .avatar-logo-letter {
-    font-size: clamp(1.95rem, 8.8vw, 2.75rem);
+    font-size: clamp(2.1rem, 9.2vw, 3rem);
   }
 }

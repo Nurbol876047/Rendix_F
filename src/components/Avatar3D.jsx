@@ -31,15 +31,15 @@ const Avatar3D = () => {
   const stageRef = useRef(null);
   const frameRef = useRef(0);
   const idleStartRef = useRef(0);
-  const currentRef = useRef({ rotateX: -14, rotateY: 0, floatY: 0 });
-  const targetRef = useRef({ rotateX: -14, rotateY: 0 });
+  const currentRef = useRef({ rotateX: -8, rotateY: 0, floatY: 0 });
+  const targetRef = useRef({ rotateX: -8, rotateY: 0 });
   const velocityRef = useRef({ rotateX: 0, rotateY: 0 });
   const dragRef = useRef({
     active: false,
     pointerId: null,
     startX: 0,
     startY: 0,
-    baseRotateX: -14,
+    baseRotateX: -8,
     baseRotateY: 0,
     lastX: 0,
     lastY: 0,
@@ -70,9 +70,9 @@ const Avatar3D = () => {
       return undefined;
     }
 
-    const applyTransforms = () => {
-      stage.style.setProperty('--avatar-rotate-x', `${currentRef.current.rotateX}deg`);
-      stage.style.setProperty('--avatar-rotate-y', `${currentRef.current.rotateY}deg`);
+    const applyTransforms = (idleRotateX = 0, idleRotateY = 0) => {
+      stage.style.setProperty('--avatar-rotate-x', `${currentRef.current.rotateX + idleRotateX}deg`);
+      stage.style.setProperty('--avatar-rotate-y', `${currentRef.current.rotateY + idleRotateY}deg`);
       stage.style.setProperty('--avatar-float-y', `${currentRef.current.floatY ?? 0}px`);
     };
 
@@ -82,14 +82,18 @@ const Avatar3D = () => {
       }
 
       const elapsed = (timestamp - idleStartRef.current) / 1000;
-      const idleRotateX = Math.sin(elapsed * 0.92) * 1.8;
-      const idleRotateY = Math.cos(elapsed * 0.74) * 1.4;
+      const idleRotateX = dragRef.current.active ? 0 : Math.sin(elapsed * 0.92) * 1.2;
+      const idleRotateY = dragRef.current.active ? 0 : Math.cos(elapsed * 0.74) * 0.8;
 
       if (!dragRef.current.active) {
         targetRef.current.rotateX += velocityRef.current.rotateX;
         targetRef.current.rotateY += velocityRef.current.rotateY;
         velocityRef.current.rotateX *= 0.94;
         velocityRef.current.rotateY *= 0.94;
+
+        const snappedY = Math.round(targetRef.current.rotateY / 360) * 360;
+        targetRef.current.rotateY += (snappedY - targetRef.current.rotateY) * 0.035;
+        targetRef.current.rotateX += (-8 - targetRef.current.rotateX) * 0.05;
 
         if (Math.abs(velocityRef.current.rotateX) < 0.002) {
           velocityRef.current.rotateX = 0;
@@ -104,12 +108,7 @@ const Avatar3D = () => {
 
       currentRef.current.rotateX += (targetRef.current.rotateX - currentRef.current.rotateX) * 0.09;
       currentRef.current.rotateY += (targetRef.current.rotateY - currentRef.current.rotateY) * 0.09;
-      currentRef.current.rotateX += idleRotateX;
-      currentRef.current.rotateY += idleRotateY;
-      applyTransforms();
-
-      currentRef.current.rotateX -= idleRotateX;
-      currentRef.current.rotateY -= idleRotateY;
+      applyTransforms(idleRotateX, idleRotateY);
 
       frameRef.current = window.requestAnimationFrame(animate);
     };
@@ -154,7 +153,7 @@ const Avatar3D = () => {
     const deltaX = event.clientX - dragRef.current.startX;
     const deltaY = event.clientY - dragRef.current.startY;
     const rotateY = dragRef.current.baseRotateY + deltaX * 0.58;
-    const rotateX = dragRef.current.baseRotateX - deltaY * 0.46;
+    const rotateX = Math.max(-40, Math.min(26, dragRef.current.baseRotateX - deltaY * 0.28));
     const now = performance.now();
     const elapsed = Math.max(16, now - dragRef.current.lastTime);
     const frameStep = elapsed / 16.67;
