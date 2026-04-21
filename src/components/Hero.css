@@ -215,9 +215,7 @@
   cursor: grab;
   user-select: none;
   touch-action: none;
-  background:
-    radial-gradient(circle at center, rgba(230, 57, 70, 0.18), transparent 38%),
-    linear-gradient(180deg, rgba(15, 15, 15, 0.24), rgba(3, 3, 3, 0));
+  background: transparent;
 }
 
 .avatar-showcase-panel.is-dragging {
@@ -226,75 +224,45 @@
 
 .avatar-letter-stage {
   position: relative;
-  width: min(100%, 680px);
-  padding: 2rem 1.4rem;
-  display: grid;
-  gap: 1.6rem;
-  justify-items: center;
+  width: min(100%, 620px);
+  min-height: min(64vw, 420px);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .avatar-letter-stage-panel {
-  width: min(72%, 390px);
-  min-height: min(72vw, 390px);
-  padding: 1.8rem;
-  justify-items: center;
-  border: 1px solid rgba(230, 57, 70, 0.18);
-  background:
-    radial-gradient(circle at 30% 18%, rgba(255, 109, 109, 0.12), transparent 22%),
-    radial-gradient(circle at 62% 50%, rgba(230, 57, 70, 0.08), transparent 36%),
-    linear-gradient(180deg, rgba(28, 2, 6, 0.96), rgba(8, 1, 2, 0.99));
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.03) inset,
-    0 30px 80px rgba(0, 0, 0, 0.36);
-  text-align: center;
+  width: min(100%, 560px);
+  min-height: min(58vw, 340px);
+  padding: 2rem 1rem;
   transform-style: preserve-3d;
   transform:
     rotateX(var(--avatar-rotate-x, -8deg))
     rotateY(var(--avatar-rotate-y, 12deg))
     translateZ(0);
   will-change: transform;
-  transition: box-shadow 0.25s ease;
-}
-
-.avatar-letter-stage-panel::before,
-.avatar-letter-stage-panel::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-}
-
-.avatar-letter-stage-panel::before {
-  inset: 1rem;
-  border: 1px solid rgba(230, 57, 70, 0.15);
-  transform: translateZ(18px);
-}
-
-.avatar-letter-stage-panel::after {
-  inset: auto 14% 1rem;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(230, 57, 70, 0.4), transparent);
-  transform: translateZ(28px);
 }
 
 .avatar-logo-panel {
   position: relative;
-  display: grid;
+  display: flex;
   align-items: center;
+  justify-content: center;
   width: 100%;
   min-height: 100%;
-  padding: 0.75rem;
+  padding: 2rem 1rem;
   overflow: hidden;
 }
 
 .avatar-logo-panel::before {
   content: '';
   position: absolute;
-  inset: 18% 12% 24%;
-  background: radial-gradient(circle, rgba(230, 57, 70, 0.16), transparent 70%);
-  filter: blur(22px);
-  transform: translateZ(8px);
+  inset: 24% 18%;
+  background:
+    radial-gradient(circle, rgba(255, 114, 114, 0.22), rgba(230, 57, 70, 0.14) 28%, transparent 72%);
+  filter: blur(26px);
+  transform: translateZ(14px);
 }
 
 .avatar-logo-noise {
@@ -324,7 +292,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(0.32rem, 1vw, 0.7rem);
+  gap: clamp(0.38rem, 1vw, 0.8rem);
   width: 100%;
   padding: 0 0.3rem;
   transform: translateZ(58px);
@@ -332,24 +300,24 @@
 
 .avatar-logo-letter {
   font-family: var(--font-heading);
-  font-size: clamp(1.65rem, 3.6vw, 2.5rem);
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-size: clamp(2rem, 4.6vw, 3.4rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
   line-height: 1;
   text-transform: uppercase;
   color: #e63946;
   text-shadow:
-    0 0 10px rgba(230, 57, 70, 0.3),
-    0 0 26px rgba(230, 57, 70, 0.18);
+    0 0 12px rgba(230, 57, 70, 0.38),
+    0 0 32px rgba(230, 57, 70, 0.22);
 }
 
 .avatar-logo-letter.is-hot {
-  background: linear-gradient(180deg, #ffe9c9 0%, #ff9f6b 38%, #ff4156 78%, #e63946 100%);
+  background: linear-gradient(180deg, #ffeccc 0%, #ffbb7a 36%, #ff5868 72%, #e63946 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   text-shadow: none;
-  filter: drop-shadow(0 0 12px rgba(255, 164, 107, 0.4));
+  filter: drop-shadow(0 0 16px rgba(255, 172, 108, 0.5));
 }
 
 .avatar-letter-grid {
@@ -408,20 +376,6 @@
   width: 3rem;
   height: 1px;
   background: linear-gradient(90deg, rgba(230, 57, 70, 0.12), rgba(230, 57, 70, 0.8));
-}
-
-.avatar-orbit {
-  position: absolute;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.avatar-orbit-one {
-  inset: 9%;
-}
-
-.avatar-orbit-two {
-  inset: 18%;
 }
 
 .avatar-core {
@@ -494,43 +448,6 @@
   transform: translateZ(24px);
 }
 
-.avatar-node {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.05);
-}
-
-.avatar-node-one {
-  top: 12%;
-  right: 20%;
-}
-
-.avatar-node-two {
-  bottom: 18%;
-  left: 15%;
-  background: var(--color-accent);
-}
-
-.avatar-node-three {
-  bottom: 24%;
-  right: 12%;
-}
-
-.avatar-showcase-panel .avatar-orbit-one {
-  animation: avatarOrbitRotate 18s linear infinite;
-}
-
-.avatar-showcase-panel .avatar-orbit-two {
-  animation: avatarOrbitRotateReverse 14s linear infinite;
-}
-
-.avatar-showcase-panel .avatar-node {
-  animation: avatarNodePulse 3.2s ease-in-out infinite;
-}
-
 @keyframes avatarTileFloat {
   0%,
   100% {
@@ -544,36 +461,6 @@
       translateY(calc(var(--tile-shift) - 14px))
       rotateX(12deg)
       rotateY(calc(var(--tile-tilt) * 1.08));
-  }
-}
-
-@keyframes avatarOrbitRotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes avatarOrbitRotateReverse {
-  from {
-    transform: rotate(360deg);
-  }
-  to {
-    transform: rotate(0deg);
-  }
-}
-
-@keyframes avatarNodePulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0.85;
-  }
-  50% {
-    transform: scale(1.18);
-    opacity: 1;
   }
 }
 
@@ -666,16 +553,16 @@
   }
 
   .avatar-letter-stage-panel {
-    width: min(88%, 360px);
-    min-height: min(88vw, 360px);
-    padding: 1.25rem;
+    width: min(100%, 420px);
+    min-height: min(74vw, 250px);
+    padding: 1.5rem 0.4rem;
   }
 
   .avatar-logo-word {
-    gap: clamp(0.28rem, 1vw, 0.55rem);
+    gap: clamp(0.22rem, 0.8vw, 0.42rem);
   }
 
   .avatar-logo-letter {
-    font-size: clamp(1.55rem, 7.3vw, 2.05rem);
+    font-size: clamp(1.6rem, 7.2vw, 2.2rem);
   }
 }

@@ -142,9 +142,7 @@ const Avatar3D = () => {
         onPointerCancel={handlePointerLeave}
         onPointerLeave={handlePointerLeave}
       >
-        <span className="avatar-orbit avatar-orbit-one" />
-        <span className="avatar-orbit avatar-orbit-two" />
-        <div ref={stageRef} className="avatar-letter-stage avatar-letter-stage-panel glass-panel">
+        <div ref={stageRef} className="avatar-letter-stage avatar-letter-stage-panel">
           <div className="avatar-logo-panel">
             <div className="avatar-logo-noise" aria-hidden="true">
               {sparks.map((spark, index) => (
@@ -173,10 +171,6 @@ const Avatar3D = () => {
             </div>
           </div>
         </div>
-
-        <span className="avatar-node avatar-node-one" />
-        <span className="avatar-node avatar-node-two" />
-        <span className="avatar-node avatar-node-three" />
       </div>
     </div>
   );
