@@ -113,12 +113,12 @@ const FloatingLetter = ({ letter, index, total }) => {
       <Center>
         <Text3D
           font={fontUrl}
-          size={0.56}
-          height={0.28}
+          size={0.46}
+          height={0.22}
           curveSegments={20}
           bevelEnabled
-          bevelThickness={0.025}
-          bevelSize={0.018}
+          bevelThickness={0.02}
+          bevelSize={0.014}
           bevelOffset={0}
           bevelSegments={8}
         >
@@ -153,7 +153,7 @@ const RendixLetters = ({ brand }) => {
   const letters = useMemo(() => Array.from(brand.replace(/\s+/g, '')), [brand]);
 
   return (
-    <group scale={[0.78, 0.78, 0.78]}>
+    <group scale={[0.64, 0.64, 0.64]}>
       {letters.map((letter, index) => (
         <FloatingLetter
           key={`${letter}-${index}`}
