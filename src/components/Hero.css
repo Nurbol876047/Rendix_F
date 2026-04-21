@@ -202,9 +202,9 @@
 }
 
 .avatar-webgl-host {
-  width: min(100%, 760px);
-  height: min(100%, 560px);
-  min-height: 420px;
+  width: min(100%, 680px);
+  height: min(100%, 500px);
+  min-height: 380px;
 }
 
 .avatar-webgl-host canvas {
@@ -650,8 +650,8 @@
   }
 
   .avatar-webgl-host {
-    width: min(100%, 560px);
-    min-height: 300px;
+    width: min(100%, 500px);
+    min-height: 280px;
   }
 
   .avatar-logo-word {
